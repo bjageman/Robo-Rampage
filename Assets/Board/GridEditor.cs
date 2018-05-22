@@ -24,5 +24,6 @@ public class GridEditor : MonoBehaviour {
 			0f, 
 			Mathf.RoundToInt (transform.position.z)
 		);
+		gameObject.name = transform.position.ToString();
 	}
 }

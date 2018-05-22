@@ -7,15 +7,15 @@ public class BotMovement : MonoBehaviour {
 
 	[SerializeField] Vector2Int currentDirection;
 	[SerializeField] float dwellTime = 1f;
+	
+	[SerializeField] Register register;
 
-	List<Command> discardPile;
 	Dictionary<Vector2Int, Waypoint> grid;
 	Waypoint currentWaypoint; 
 	BoardProcessor board;
 
 	void Start(){
 		Setup ();
-		ProcessMoves ();
 	}
 
 	void Setup ()
@@ -26,27 +26,25 @@ public class BotMovement : MonoBehaviour {
 				Mathf.RoundToInt(transform.position.x), 
 				Mathf.RoundToInt(transform.position.y))
 		);
-		print ("Current waypoint " + currentWaypoint.GetGridPosition());
 	}
 
-	void ProcessMoves ()
+	public void ProcessMoves ()
 	{
-		PlayerCards playerCards = GetComponent<PlayerCards> ();
-		playerCards.MockHand ();
-		var hand = playerCards.GetHand ();
-		StartCoroutine (FollowCommands (hand));
+		PlayerCardsHandler playerCards = FindObjectOfType<PlayerCardsHandler> ();
+		StartCoroutine (FollowCommands (register));
 	}
 
-	IEnumerator FollowCommands(List<Command> commands){
-		foreach (Command command in commands) {
-			//print (command.GetTitle() + " " + command.GetPower ());
-			if (command.GetTitle() == "Move") {
-				for (int x = 0; x < command.GetPower (); x++) {
+	IEnumerator FollowCommands(Register register){
+		var cards = register.GetComponentsInChildren<CardDisplay>();
+		foreach (CardDisplay card in cards) {
+			if (card == null){ break; }
+			if (card.command == "Move") {
+				for (int x = 0; x < card.power; x++) {
 					var direction = DetermineMoveDirection ();
 					MoveBotForward (direction);
 				}
-			} else if (command.GetTitle() == "Rotate") {
-				ProcessRotation (command);
+			} else if (card.command == "Rotate") {
+				ProcessRotation (card.power);
 			} else {
 				print ("Unknown command");
 			}
@@ -84,9 +82,9 @@ public class BotMovement : MonoBehaviour {
 		return new Vector2Int (0, 0);
 	}
 
-	void ProcessRotation (Command command)
+	void ProcessRotation (int power)
 	{
-		int zRotation = Mathf.RoundToInt (transform.rotation.z)  + (90 * command.GetPower ());
+		int zRotation = Mathf.RoundToInt (transform.rotation.z)  + (90 * power);
 		//todo Set direction facing with rotation
 		transform.Rotate (
 			0f, 
