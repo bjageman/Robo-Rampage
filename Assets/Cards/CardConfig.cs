@@ -15,14 +15,15 @@ public abstract class CardConfig : ScriptableObject {
 
 	public abstract CardBehavior GetBehaviorComponent(GameObject objectToAttachTo);
 
-	public void AttachCardTo(GameObject objectToAttachTo){
+	public CardBehavior AttachCardTo(GameObject objectToAttachTo){
 		CardBehavior behaviorComponent = GetBehaviorComponent(objectToAttachTo);
 		behaviorComponent.Config = this;
 		behavior = behaviorComponent;
+		return behavior;
 	}
 
-	public void Use(GameObject target){
-		behavior.Use(target);
+	public void Use(BotControl bot){
+		behavior.Use(bot);
 	}
 
 }

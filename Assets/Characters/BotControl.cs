@@ -29,6 +29,7 @@ public class BotControl : MonoBehaviour {
 
 	public void SetDestinationWaypoint(Vector2Int waypoint){
 		destinationWaypoint = board.GetNearestWaypoint(waypoint);
+		print(gameObject.name + " going to " + destinationWaypoint);
 	}
 
 	void Awake(){
@@ -37,14 +38,14 @@ public class BotControl : MonoBehaviour {
 	}
 
 	void Start(){
-		cardCommands = GetComponent<CardCommands>();
+		cardCommands = gameObject.GetComponent<CardCommands>();
 		cards = cardCommands.getCards();
 	}
 
 	void Update(){
-		if (playerTurn == turnHandler.CurrentTurnNumber && cards.Length > cardIndex)
+		if (playerTurn == turnHandler.CurrentTurnNumber && this == turnHandler.getActiveTurn() && cards.Length > cardIndex)
         {
-            cards[cardIndex].Use(null);
+            cardCommands.RunCommand(cardIndex, this);
             StartCoroutine(HandleMovement());
 			cardIndex++;
 			playerTurn++;
@@ -82,7 +83,6 @@ public class BotControl : MonoBehaviour {
 	}
 
 	public void MoveToWaypoint(int x, int y){
-		print("Moving to " + x + "," + y);
 		var waypoint = board.GetNearestWaypoint(x,y);
 		SetDestinationWaypoint(x, y);		
 	}

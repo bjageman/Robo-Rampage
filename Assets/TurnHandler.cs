@@ -18,6 +18,10 @@ public class TurnHandler : MonoBehaviour {
 		numPlayers = players.Count;
 	}
 	
+	public BotControl getActiveTurn(){
+		return players[0];
+	}
+
 	public void submitTurn(BotControl player){
 		for (int i = players.Count - 1; i >= 0; i--){
 			if (player.gameObject.name == players[i].gameObject.name){
@@ -33,6 +37,5 @@ public class TurnHandler : MonoBehaviour {
     {
         currentTurnNumber++;
 		players = new List<BotControl>(FindObjectsOfType<BotControl>());
-		print("NEXT TURN! " + currentTurnNumber);
     }
 }

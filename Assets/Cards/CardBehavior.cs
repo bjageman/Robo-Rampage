@@ -8,6 +8,6 @@ public abstract class CardBehavior : MonoBehaviour {
 
 	public CardConfig Config { set { this.config = value; }}
 	
-	public abstract void Use(GameObject target = null);
+	public abstract void Use(BotControl bot);
 
 }
