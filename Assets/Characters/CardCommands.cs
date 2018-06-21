@@ -18,14 +18,11 @@ public class CardCommands : MonoBehaviour {
 		AttachInitialCommands();
 	}
 
+	//TODO Probably won't need to attach
 	private void AttachInitialCommands(){
 		for (int cardIndex = 0; cardIndex < cards.Length; cardIndex++){
 			cards[cardIndex].AttachCardTo(gameObject);
 		}
-	}
-
-	public void RunRegister(){
-
 	}
 
 	//TODO I need to be able to run a command, wait for it to finish, then run the next.

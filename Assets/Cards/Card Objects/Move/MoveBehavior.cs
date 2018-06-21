@@ -8,13 +8,15 @@ public class MoveBehavior : CardBehavior {
 	Vector2Int direction;
 	Vector2Int movePosition;
 	
-	void Awake () {
-		bot = GetComponent<BotControl>();
+	public void Start(){
+		bot = gameObject.GetComponent<BotControl>();
 	}
-	
+
 	public override void Use(GameObject target){
+		bot = gameObject.GetComponent<BotControl>();
+		print(bot.gameObject.name + " Moving " + (config as MoveConfig).MoveSpaces);
 		direction = bot.GetFacingDirection();
-		var moveDirectionPower = new Vector2Int(direction.x * (config as MoveConfig).MoveSpaces, direction.y * 3);
+		var moveDirectionPower = new Vector2Int(direction.x * (config as MoveConfig).MoveSpaces, direction.y * (config as MoveConfig).MoveSpaces);
 		movePosition = new Vector2Int(
 			Mathf.RoundToInt(transform.position.x + moveDirectionPower.x), 
 			Mathf.RoundToInt(transform.position.z + moveDirectionPower.y)

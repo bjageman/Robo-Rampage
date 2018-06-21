@@ -9,7 +9,6 @@ public class BotControl : MonoBehaviour {
 	[SerializeField] float dwellTime = 1f;
 	[SerializeField] float moveSpeed = .5f;
 	
-	[SerializeField] Register register;
 	[SerializeField][Range(.01f,.5f)] float waypointThreshold = .1f;
 
 	Waypoint currentWaypoint; 
@@ -24,12 +23,12 @@ public class BotControl : MonoBehaviour {
 	int cardIndex = 0;
 	CardConfig[] cards;
 
-	public void SetDestinationWaypoint(Vector2Int waypoint){
-		destinationWaypoint = board.GetNearestWaypoint(waypoint);
-	}
-
 	public void SetDestinationWaypoint(int x, int y){
 		SetDestinationWaypoint(new Vector2Int(x, y));
+	}
+
+	public void SetDestinationWaypoint(Vector2Int waypoint){
+		destinationWaypoint = board.GetNearestWaypoint(waypoint);
 	}
 
 	void Awake(){
@@ -40,21 +39,22 @@ public class BotControl : MonoBehaviour {
 	void Start(){
 		cardCommands = GetComponent<CardCommands>();
 		cards = cardCommands.getCards();
-		cardCommands.RunRegister();
 	}
 
 	void Update(){
-		if (playerTurn == turnHandler.currentTurnNumber && cards.Length > cardIndex)
+		if (playerTurn == turnHandler.CurrentTurnNumber && cards.Length > cardIndex)
         {
-			cards[cardIndex].Use(null);
+            cards[cardIndex].Use(null);
             StartCoroutine(HandleMovement());
-			turnHandler.currentTurnNumber++;
 			cardIndex++;
+			playerTurn++;
         }
     }
 
+    //TODO Handle going over the board
     private IEnumerator HandleMovement()
     {
+		if (!destinationWaypoint){ playerTurn++; yield break; }
 		float distanceBetweenWaypoints = (transform.position - destinationWaypoint.transform.position).magnitude;
         while (distanceBetweenWaypoints > waypointThreshold)
         {
@@ -64,8 +64,8 @@ public class BotControl : MonoBehaviour {
 			distanceBetweenWaypoints = (transform.position - destinationWaypoint.transform.position).magnitude;
 			yield return new WaitForEndOfFrame();
 		}
-		playerTurn++;
         FixPositionToWaypoint();
+		turnHandler.submitTurn(this);
     }
 
     void SetupInitialBoardPosition ()
@@ -74,6 +74,7 @@ public class BotControl : MonoBehaviour {
 		currentWaypoint = board.GetNearestWaypoint (transform.position.x, transform.position.z, waypointThreshold);
 		transform.position = currentWaypoint.transform.position;
 		destinationWaypoint = currentWaypoint;
+		print(gameObject.name + " " + currentWaypoint);
 	}
 
 	public void MoveToWaypoint(Vector2Int position){
@@ -92,7 +93,8 @@ public class BotControl : MonoBehaviour {
         transform.position = nearestWaypoint.transform.position;
     }
 
-    void RotateBot (int numRotations)
+	//TODO Animate rotations
+    public void RotateBot (int numRotations)
 	{
 		int zRotation = Mathf.RoundToInt (transform.rotation.z)  + (90 * numRotations);
 		//todo Set direction facing with rotation
@@ -101,6 +103,7 @@ public class BotControl : MonoBehaviour {
 			0f, 
 			zRotation
 		);
+		turnHandler.submitTurn(this); //TODO Move out of here
 	}
 
 	public Vector2Int GetFacingDirection(){
