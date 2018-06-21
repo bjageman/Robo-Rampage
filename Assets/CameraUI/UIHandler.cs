@@ -24,7 +24,6 @@ public class UIHandler : MonoBehaviour, IHasChanged {
 				builder.Append (" - ");
 			}
 		}
-		print(builder);
 	}
 }
 

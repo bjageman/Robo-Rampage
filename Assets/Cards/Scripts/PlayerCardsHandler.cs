@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerCardsHandler : MonoBehaviour {
 
-	[SerializeField] Deck deck;
 	[SerializeField] Hand hand;
 
 	System.Random rnd = new System.Random();
@@ -16,20 +15,20 @@ public class PlayerCardsHandler : MonoBehaviour {
 	}
 
 	public void Start(){
-		deck.CreateDeck();	
-		DrawHand ();
+		//deck.CreateDeck();	
+		// DrawHand ();
 	}
 
-	public void DrawHand(){
-		var slots = hand.GetComponentsInChildren<Slot>();
-		foreach (Slot slot in slots){
-			var cards = deck.GetComponentsInChildren<CardDisplay>();
-			var card = cards[rnd.Next(0, cards.Length)];
-			if (!slot.item){
-				card.transform.SetParent(slot.transform);
-			}
-		}
-	}
+	// public void DrawHand(){
+	// 	var slots = hand.GetComponentsInChildren<Slot>();
+	// 	foreach (Slot slot in slots){
+	// 		var cards = deck.GetComponentsInChildren<CardDisplay>();
+	// 		var card = cards[rnd.Next(0, cards.Length)];
+	// 		if (!slot.item){
+	// 			card.transform.SetParent(slot.transform);
+	// 		}
+	// 	}
+	// }
 
 	//TODO Create the deck on the fly for each player
 

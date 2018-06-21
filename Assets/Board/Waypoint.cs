@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Waypoint : MonoBehaviour {
 
+	float waypointSize = 0.1f;
 
 	public Vector2Int GetGridPosition(){
 		return new Vector2Int (
@@ -11,5 +12,10 @@ public class Waypoint : MonoBehaviour {
 			Mathf.RoundToInt (transform.position.z)
 		);
 			
+	}
+
+	public void OnDrawGizmos(){
+		Gizmos.color = Color.red;
+		Gizmos.DrawSphere(transform.position, waypointSize);
 	}
 }

@@ -21,7 +21,8 @@ GameObject:
   - component: {fileID: 4351890597448560}
   - component: {fileID: 33049069781829726}
   - component: {fileID: 23924149432443768}
-  - component: {fileID: 95161057990062196}
+  - component: {fileID: 54334089048153754}
+  - component: {fileID: 114123444414591934}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Untagged
@@ -35,9 +36,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1865196446032246}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.49, y: 0, z: 1.47}
+  m_LocalScale: {x: 0.3, y: 0.30000025, z: 0.30000025}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -83,20 +84,33 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1865196446032246}
   m_Mesh: {fileID: 4300000, guid: 08eb4ce4ed5e99042bceda85a7ff96a7, type: 3}
---- !u!95 &95161057990062196
-Animator:
-  serializedVersion: 3
+--- !u!54 &54334089048153754
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1865196446032246}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &114123444414591934
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1865196446032246}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 08eb4ce4ed5e99042bceda85a7ff96a7, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bb5a68d809418a418058d8e84f343c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentDirection: {x: 0, y: 0}
+  dwellTime: 1
+  register: {fileID: 0}
+  waypointThreshold: 0.19
