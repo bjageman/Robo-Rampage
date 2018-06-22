@@ -43,7 +43,13 @@ public class BotControl : MonoBehaviour {
 	}
 
 	void Update(){
-		if (playerTurn == turnHandler.CurrentTurnNumber && this == turnHandler.getActiveTurn() && cards.Length > cardIndex)
+		bool cardsStillLeft = (cards.Length > cardIndex);
+		bool isCurrentBotsTurn = (this == turnHandler.getActiveTurn());
+		bool playerHasNotTakenTurn = (playerTurn == turnHandler.CurrentTurnNumber);
+		if (this.name == "Bot"){
+			print(cardsStillLeft + " " + isCurrentBotsTurn + " " + playerHasNotTakenTurn);
+		}
+		if ( playerHasNotTakenTurn && isCurrentBotsTurn && cardsStillLeft)
         {
             cardCommands.RunCommand(cardIndex, this);
             StartCoroutine(HandleMovement());
@@ -103,7 +109,6 @@ public class BotControl : MonoBehaviour {
 			0f, 
 			zRotation
 		);
-		turnHandler.submitTurn(this); //TODO Move out of here
 	}
 
 	public Vector2Int GetFacingDirection(){
