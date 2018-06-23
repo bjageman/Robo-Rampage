@@ -5,25 +5,29 @@ using UnityEngine.UI;
 
 //TODO Scriptable objects
 
-public abstract class CardConfig : ScriptableObject {
+public abstract class CardConfig : ScriptableObject
+{
 
-	[SerializeField] string cardName;
-	[SerializeField] int cardCost;
-	[SerializeField] Image cardImage;
+    [SerializeField] string cardName;
+    [SerializeField] int cardCost;
+    [SerializeField] Image cardImage;
 
-	protected CardBehavior behavior;
+    protected CardBehavior behavior;
 
-	public abstract CardBehavior GetBehaviorComponent(GameObject objectToAttachTo);
+    public abstract CardBehavior GetBehaviorComponent(GameObject objectToAttachTo);
 
-	public CardBehavior AttachCardTo(GameObject objectToAttachTo){
-		CardBehavior behaviorComponent = GetBehaviorComponent(objectToAttachTo);
-		behaviorComponent.Config = this;
-		behavior = behaviorComponent;
-		return behavior;
-	}
+    public CardBehavior AttachCardTo(GameObject objectToAttachTo)
+    {
+        CardBehavior behaviorComponent = GetBehaviorComponent(objectToAttachTo);
+        behaviorComponent.Config = this;
+        behavior = behaviorComponent;
+        return behavior;
+    }
 
-	public void Use(BotControl bot){
-		behavior.Use(bot);
-	}
+    public void Use(BotControl bot)
+    {
+        behavior.Use(bot);
+    }
+
 
 }

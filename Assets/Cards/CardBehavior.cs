@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CardBehavior : MonoBehaviour {
+public abstract class CardBehavior : MonoBehaviour
+{
+    protected CardConfig config;
 
-	protected CardConfig config;
+    public CardConfig Config { set { this.config = value; } }
 
-	public CardConfig Config { set { this.config = value; }}
-	
-	public abstract void Use(BotControl bot);
-
+    public abstract void Use(BotControl bot);
 }

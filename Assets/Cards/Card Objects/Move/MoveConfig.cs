@@ -11,6 +11,6 @@ public class MoveConfig : CardConfig {
 	public int MoveSpaces { get { return moveSpaces; }}
 
 	public override CardBehavior GetBehaviorComponent(GameObject objectToAttachTo){
-		return objectToAttachTo.AddComponent<MoveBehavior>();
+		return new MoveBehavior();
 	}
 }

@@ -46,9 +46,6 @@ public class BotControl : MonoBehaviour {
 		bool cardsStillLeft = (cards.Length > cardIndex);
 		bool isCurrentBotsTurn = (this == turnHandler.getActiveTurn());
 		bool playerHasNotTakenTurn = (playerTurn == turnHandler.CurrentTurnNumber);
-		if (this.name == "Bot"){
-			print(cardsStillLeft + " " + isCurrentBotsTurn + " " + playerHasNotTakenTurn);
-		}
 		if ( playerHasNotTakenTurn && isCurrentBotsTurn && cardsStillLeft)
         {
             cardCommands.RunCommand(cardIndex, this);
@@ -61,7 +58,6 @@ public class BotControl : MonoBehaviour {
     //TODO Handle going over the board
     private IEnumerator HandleMovement()
     {
-		if (!destinationWaypoint){ playerTurn++; yield break; }
 		float distanceBetweenWaypoints = (transform.position - destinationWaypoint.transform.position).magnitude;
         while (distanceBetweenWaypoints > waypointThreshold)
         {
