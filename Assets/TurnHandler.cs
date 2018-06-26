@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Robo.Commands;
 
+//TODO Maybe combine Register and TurnHandler
 public class TurnHandler : MonoBehaviour {
 
 	[SerializeField] int numberOfTurnsPerRound = 5;
@@ -11,22 +13,23 @@ public class TurnHandler : MonoBehaviour {
 	int currentTurn;
 	int currentRound = 1;
 	//TODO Change to Queue
-	List<BotControl> players;
+	List<BotMovement> players;
 
 	public int CurrentTurn { get { return currentTurn; }}
 	public int CurrentRound { get { return currentRound; }}
 	public int NumberOfTurnsPerRound { get { return numberOfTurnsPerRound; }}
 
 	void Start () {
+		players = new List<BotMovement>(FindObjectsOfType<BotMovement>());
 		currentTurn = startingTurn;
-		players = new List<BotControl>(FindObjectsOfType<BotControl>());
 	}
 	
-	public BotControl getActiveTurn(){
+	public BotMovement getActiveTurn(){
 		return players[0];
 	}
 
-	public void submitTurn(BotControl player){
+	public void submitTurn(BotMovement player){
+		print("turn submitted");
 		for (int i = players.Count - 1; i >= 0; i--){
 			if (player.gameObject.name == players[i].gameObject.name){
 				players.Remove(players[i]);
@@ -45,6 +48,6 @@ public class TurnHandler : MonoBehaviour {
 		}else{
 	        currentTurn++;
 		}
-		players = new List<BotControl>(FindObjectsOfType<BotControl>());
+		players = new List<BotMovement>(FindObjectsOfType<BotMovement>());
     }
 }
