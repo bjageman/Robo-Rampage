@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33049069781829726}
   - component: {fileID: 23924149432443768}
   - component: {fileID: 54334089048153754}
+  - component: {fileID: 65851728553542614}
   - component: {fileID: 114123444414591934}
   - component: {fileID: 114604360990031896}
   m_Layer: 0
@@ -38,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1865196446032246}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 3.98, y: 0, z: 3.13}
+  m_LocalPosition: {x: 1.96, y: 0, z: 2.93}
   m_LocalScale: {x: 0.3, y: 0.30000025, z: 0.30000025}
   m_Children: []
   m_Father: {fileID: 0}
@@ -101,6 +102,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &65851728553542614
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1865196446032246}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9999999, y: 2.0000005, z: 1.0538822}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114123444414591934
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -113,8 +126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDirection: {x: 0, y: 0}
-  dwellTime: 1
   moveSpeed: 1
+  startingTurn: 1
   waypointThreshold: 0.086
 --- !u!114 &114604360990031896
 MonoBehaviour:
@@ -129,8 +142,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cards:
   - {fileID: 11400000, guid: 5226bfeaa11016144a5ee3cc01e42236, type: 2}
-  - {fileID: 11400000, guid: 2daf6692a39ef8d42ae0576f0f47a24b, type: 2}
-  - {fileID: 11400000, guid: 5c02ea0355fcaa445bc15523dd12841a, type: 2}
-  - {fileID: 11400000, guid: 0e1d455f615f4f34c93bbbd03c7d5ea3, type: 2}
-  - {fileID: 11400000, guid: 5226bfeaa11016144a5ee3cc01e42236, type: 2}
+  - {fileID: 11400000, guid: fcb2142b895e7a34f9d31b34fb297a10, type: 2}
+  - {fileID: 11400000, guid: fcb2142b895e7a34f9d31b34fb297a10, type: 2}
   commandRunning: 0

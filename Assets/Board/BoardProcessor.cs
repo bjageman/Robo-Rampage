@@ -24,7 +24,6 @@ public class BoardProcessor : MonoBehaviour {
 				return waypoint;
 			}
 		}
-		Debug.LogWarning ("Waypoint Not Found");
 		return null;
 	}
 

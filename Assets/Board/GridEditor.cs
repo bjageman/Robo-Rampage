@@ -6,13 +6,7 @@ using UnityEngine;
 [SelectionBase] //not sure why this is here
 [RequireComponent(typeof(Waypoint))]
 public class GridEditor : MonoBehaviour {
-
-	Waypoint waypoint;
-
-	void Start(){
-		waypoint = GetComponent<Waypoint>();
-	}
-
+	
 	void Update () {
 		SnapToGrid ();
 	}

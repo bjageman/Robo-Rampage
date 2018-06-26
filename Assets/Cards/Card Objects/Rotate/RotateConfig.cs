@@ -10,8 +10,9 @@ public class RotateConfig : CardConfig
 
     public int NumRotations { get { return numRotations; } }
 
+    //TODO Attach to bot that's calling it
     public override CardBehavior GetBehaviorComponent(GameObject objectToAttachTo)
     {
-        return new RotateBehavior();
+        return objectToAttachTo.AddComponent<RotateBehavior>();
     }
 }

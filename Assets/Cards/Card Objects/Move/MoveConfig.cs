@@ -10,7 +10,8 @@ public class MoveConfig : CardConfig {
 
 	public int MoveSpaces { get { return moveSpaces; }}
 
+	//TODO Attach to bot that's calling it
 	public override CardBehavior GetBehaviorComponent(GameObject objectToAttachTo){
-		return new MoveBehavior();
+        return objectToAttachTo.AddComponent<MoveBehavior>();
 	}
 }

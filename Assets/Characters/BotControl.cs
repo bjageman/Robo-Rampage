@@ -6,9 +6,9 @@ using UnityEngine;
 public class BotControl : MonoBehaviour {
 
 	[SerializeField] Vector2Int currentDirection;
-	[SerializeField] float dwellTime = 1f;
 	[SerializeField] float moveSpeed = .5f;
-	
+	[SerializeField] int startingTurn = 1;
+
 	[SerializeField][Range(.01f,.5f)] float waypointThreshold = .1f;
 
 	Waypoint currentWaypoint; 
@@ -18,19 +18,9 @@ public class BotControl : MonoBehaviour {
 	TurnHandler turnHandler;
 
 	Rigidbody rigidBody;
-	bool isMoving = false;
-	int playerTurn = 0;
+	int playerTurn; //0 because the game shouldn't start until after processing the register
 	int cardIndex = 0;
-	CardConfig[] cards;
-
-	public void SetDestinationWaypoint(int x, int y){
-		SetDestinationWaypoint(new Vector2Int(x, y));
-	}
-
-	public void SetDestinationWaypoint(Vector2Int waypoint){
-		destinationWaypoint = board.GetNearestWaypoint(waypoint);
-		print(gameObject.name + " going to " + destinationWaypoint);
-	}
+	List<CardConfig> cards;
 
 	void Awake(){
 		turnHandler = FindObjectOfType<TurnHandler>();
@@ -38,14 +28,15 @@ public class BotControl : MonoBehaviour {
 	}
 
 	void Start(){
+		playerTurn = startingTurn - 1;
 		cardCommands = gameObject.GetComponent<CardCommands>();
 		cards = cardCommands.getCards();
 	}
 
 	void Update(){
-		bool cardsStillLeft = (cards.Length > cardIndex);
+		bool cardsStillLeft = (cards.Count > cardIndex);
 		bool isCurrentBotsTurn = (this == turnHandler.getActiveTurn());
-		bool playerHasNotTakenTurn = (playerTurn == turnHandler.CurrentTurnNumber);
+		bool playerHasNotTakenTurn = (playerTurn == turnHandler.CurrentTurn);
 		if ( playerHasNotTakenTurn && isCurrentBotsTurn && cardsStillLeft)
         {
             cardCommands.RunCommand(cardIndex, this);
@@ -55,13 +46,40 @@ public class BotControl : MonoBehaviour {
         }
     }
 
+	public void SetCurrentWaypoint(Waypoint waypoint){
+		currentWaypoint = waypoint;
+	}
+
+	public void ClearProcessor(){
+		cards.Clear();
+	}
+
+	public void AddCardToProcessor(CardConfig card){
+		cards.Add(card);
+	}
+
+	public void SetDestinationWaypoint(int x, int y){
+		SetDestinationWaypoint(new Vector2Int(x, y));
+	}
+
+	public Waypoint SetDestinationWaypoint(Vector2Int waypoint){
+		destinationWaypoint = board.GetNearestWaypoint(waypoint);
+		return destinationWaypoint;
+	}
+
+	public void ProcessNextRound(){
+		playerTurn = startingTurn;
+		cardIndex = 0;
+		ClearProcessor();
+		//TODO Add new round as well?
+	}
+
     //TODO Handle going over the board
     private IEnumerator HandleMovement()
     {
 		float distanceBetweenWaypoints = (transform.position - destinationWaypoint.transform.position).magnitude;
         while (distanceBetweenWaypoints > waypointThreshold)
         {
-            isMoving = true;
             float step = moveSpeed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, destinationWaypoint.transform.position, step);
 			distanceBetweenWaypoints = (transform.position - destinationWaypoint.transform.position).magnitude;
@@ -77,7 +95,6 @@ public class BotControl : MonoBehaviour {
 		currentWaypoint = board.GetNearestWaypoint (transform.position.x, transform.position.z, waypointThreshold);
 		transform.position = currentWaypoint.transform.position;
 		destinationWaypoint = currentWaypoint;
-		print(gameObject.name + " " + currentWaypoint);
 	}
 
 	public void MoveToWaypoint(Vector2Int position){
@@ -85,7 +102,6 @@ public class BotControl : MonoBehaviour {
 	}
 
 	public void MoveToWaypoint(int x, int y){
-		var waypoint = board.GetNearestWaypoint(x,y);
 		SetDestinationWaypoint(x, y);		
 	}
 
@@ -105,6 +121,7 @@ public class BotControl : MonoBehaviour {
 			0f, 
 			zRotation
 		);
+		print(zRotation + " / " + transform.eulerAngles.z);
 	}
 
 	public Vector2Int GetFacingDirection(){

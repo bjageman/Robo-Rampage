@@ -7,15 +7,24 @@ public class MoveBehavior : CardBehavior {
 	Vector2Int direction;
 	Vector2Int movePosition;
 	
-	public override void Use(BotControl bot){
-		print(bot.gameObject.name + " Moving " + (config as MoveConfig).MoveSpaces);
-		direction = bot.GetFacingDirection();
-		var moveDirectionPower = new Vector2Int(direction.x * (config as MoveConfig).MoveSpaces, direction.y * (config as MoveConfig).MoveSpaces);
-		movePosition = new Vector2Int(
-			Mathf.RoundToInt(bot.transform.position.x + moveDirectionPower.x), 
-			Mathf.RoundToInt(bot.transform.position.z + moveDirectionPower.y)
-		);
-		bot.SetDestinationWaypoint(movePosition);
-	}
-	
+	//TODO When the destination doesn't exist, reduce the movement by 1 until it does
+	public override void Use(BotControl bot)
+    {
+        direction = bot.GetFacingDirection();
+        MoveBot(bot, (config as MoveConfig).MoveSpaces);
+		Destroy(bot.GetComponent<MoveBehavior>());
+    }
+
+    private void MoveBot(BotControl bot, int moveSpaces)
+    {
+        var moveDirectionPower = new Vector2Int(direction.x * moveSpaces, direction.y * moveSpaces);
+        movePosition = new Vector2Int(
+            Mathf.RoundToInt(bot.transform.position.x + moveDirectionPower.x),
+            Mathf.RoundToInt(bot.transform.position.z + moveDirectionPower.y)
+        );
+        var destination = bot.SetDestinationWaypoint(movePosition);
+		if (destination == null){
+			MoveBot(bot, moveSpaces -1);
+		}
+    }
 }

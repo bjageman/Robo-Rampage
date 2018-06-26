@@ -18,4 +18,13 @@ public class Waypoint : MonoBehaviour {
 		Gizmos.color = Color.red;
 		Gizmos.DrawSphere(transform.position, waypointSize);
 	}
+
+	void OnTriggerEnter(Collider other) {
+		print(other.gameObject.name + " enter blocked " + gameObject.name);
+		BotControl bot = other.GetComponent<BotControl>();
+		if (bot){
+			bot.SetCurrentWaypoint(this);
+		}
+	}
+
 }

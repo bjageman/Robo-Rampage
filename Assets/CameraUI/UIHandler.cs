@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+//TODO Delete this?
 public class UIHandler : MonoBehaviour, IHasChanged {
 
 	[SerializeField] Transform register;

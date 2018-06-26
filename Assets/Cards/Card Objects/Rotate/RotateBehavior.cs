@@ -8,8 +8,8 @@ public class RotateBehavior : CardBehavior {
 	Vector2Int movePosition;
 
 	public override void Use(BotControl bot){
-		print(bot.gameObject.name + " Rotate "+ (config as RotateConfig).NumRotations);
 		bot.RotateBot((config as RotateConfig).NumRotations);
+		Destroy(this); //TODO Only destroys the latest CardBehavior to be initialized
 	}
 	
 }

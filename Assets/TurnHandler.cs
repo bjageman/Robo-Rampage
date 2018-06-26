@@ -4,18 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnHandler : MonoBehaviour {
-	[SerializeField] int currentTurnNumber = 0;
 
+	[SerializeField] int numberOfTurnsPerRound = 5;
 
+	int startingTurn = 1;
+	int currentTurn;
+	int currentRound = 1;
+	//TODO Change to Queue
 	List<BotControl> players;
-	int numPlayers;
 
-	public int CurrentTurnNumber { get { return currentTurnNumber; }}
+	public int CurrentTurn { get { return currentTurn; }}
+	public int CurrentRound { get { return currentRound; }}
+	public int NumberOfTurnsPerRound { get { return numberOfTurnsPerRound; }}
 
-	// Use this for initialization
 	void Start () {
+		currentTurn = startingTurn;
 		players = new List<BotControl>(FindObjectsOfType<BotControl>());
-		numPlayers = players.Count;
 	}
 	
 	public BotControl getActiveTurn(){
@@ -35,7 +39,12 @@ public class TurnHandler : MonoBehaviour {
 
     private void nextTurn()
     {
-        currentTurnNumber++;
+		if (currentTurn == numberOfTurnsPerRound){
+			currentTurn = startingTurn;
+			currentRound++;
+		}else{
+	        currentTurn++;
+		}
 		players = new List<BotControl>(FindObjectsOfType<BotControl>());
     }
 }
