@@ -41,7 +41,6 @@ public class TurnManager : MonoBehaviour {
 				players.Add(playerToSort);
 			}
 		}
-        
     }
 
     public BotMovement getActiveTurn(){
@@ -67,6 +66,7 @@ public class TurnManager : MonoBehaviour {
 		}else{
 	        currentTurn++;
 		}
+		print("Send End of Turn Observer");
 		AddPlayersToQueue();
     }
 }
