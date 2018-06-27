@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Robo.Commands;
+using Robo.Bots;
 
 //TODO Maybe combine Register and TurnHandler
-public class TurnHandler : MonoBehaviour {
+public class TurnManager : MonoBehaviour {
 
 	[SerializeField] int numberOfTurnsPerRound = 5;
 
@@ -17,19 +17,38 @@ public class TurnHandler : MonoBehaviour {
 
 	public int CurrentTurn { get { return currentTurn; }}
 	public int CurrentRound { get { return currentRound; }}
-	public int NumberOfTurnsPerRound { get { return numberOfTurnsPerRound; }}
+	public int NumberOfCardsPlayedPerRound { get { return numberOfTurnsPerRound; }}
 
-	void Start () {
-		players = new List<BotMovement>(FindObjectsOfType<BotMovement>());
-		currentTurn = startingTurn;
-	}
-	
-	public BotMovement getActiveTurn(){
+	void Start ()
+    {
+        AddPlayersToQueue();
+        currentTurn = startingTurn;
+    }
+
+	//TODO Make this more elegant
+    private void AddPlayersToQueue()
+    {
+		//First add human players, then AI
+		players = new List<BotMovement>();
+		BotMovement[] playersToSort = FindObjectsOfType<BotMovement>();
+		foreach(BotMovement playerToSort in playersToSort){
+			if(playerToSort.GetComponent<BotAI>() == null){
+				players.Add(playerToSort);
+			}
+		}
+		foreach(BotMovement playerToSort in playersToSort){
+			if(playerToSort.GetComponent<BotAI>()){
+				players.Add(playerToSort);
+			}
+		}
+        
+    }
+
+    public BotMovement getActiveTurn(){
 		return players[0];
 	}
 
 	public void submitTurn(BotMovement player){
-		print("turn submitted");
 		for (int i = players.Count - 1; i >= 0; i--){
 			if (player.gameObject.name == players[i].gameObject.name){
 				players.Remove(players[i]);
@@ -48,6 +67,6 @@ public class TurnHandler : MonoBehaviour {
 		}else{
 	        currentTurn++;
 		}
-		players = new List<BotMovement>(FindObjectsOfType<BotMovement>());
+		AddPlayersToQueue();
     }
 }

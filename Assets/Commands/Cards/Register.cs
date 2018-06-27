@@ -2,30 +2,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Robo.Bots;
 
 //TODO Maybe combine Register and TurnHandler
 namespace Robo.Commands{
 	public class Register : MonoBehaviour {
 
-		[SerializeField] PlayerControl player;
+		[SerializeField] BotMovement bot;
+		[SerializeField] Deck deck; //TODO This should only be in one place...
+		[SerializeField] Hand hand; //TODO Don't do this either. Probably use an observer
 
-		TurnHandler turnHandler;
+		TurnManager turnHandler;
 		Card[] cards;
 
 		void Start(){
-			turnHandler = FindObjectOfType<TurnHandler>();
+			turnHandler = FindObjectOfType<TurnManager>();
 		}
 
 		public void ProcessRegister()
 		{
 			cards = GetComponentsInChildren<Card>();
-			if (turnHandler.NumberOfTurnsPerRound == cards.Length){
-				player.ProcessNextRound();
+			if (turnHandler.NumberOfCardsPlayedPerRound == cards.Length){
+				bot.ProcessNextRound();
 				HandleCardCommandsInRegister();
+				hand.DrawHandToFull();
 			}else{
 				//TODO Show in UI
 				//TODO Don't allow too many in register
-				print("You don't have enough cards in the register.");
+				print("You don't have enough cards in the register. You have " + cards.Length);
 			}
 			
 		}
@@ -34,9 +38,9 @@ namespace Robo.Commands{
 		{
 			foreach (Card card in cards)
 			{
-				player.AddCardToProcessor(card.GetCardConfig);
-				//TODO
-				//Flag player as "ready" -> Start actions after all players submit ready
+				bot.AddCardToProcessor(card.GetCardConfig);
+				deck.DiscardCard(card.GetCardConfig);
+				Destroy(card.gameObject);
 			}
 		}
 	}

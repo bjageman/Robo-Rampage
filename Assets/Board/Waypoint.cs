@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Robo.Commands; //TODO Consider refactor
+using Robo.Bots; 
 
 namespace Robo.Board{
 	public class Waypoint : MonoBehaviour {

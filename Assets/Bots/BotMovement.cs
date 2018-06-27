@@ -2,21 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Robo.Board;
+using Robo.Commands;
 
+namespace Robo.Bots{
 public class BotMovement : MonoBehaviour {
 
 	[SerializeField] Vector2Int currentDirection;
 	[SerializeField] float moveSpeed = .5f;
 	[SerializeField][Range(.01f,.5f)] float waypointThreshold = .1f;
+	[SerializeField] int startingTurn = 1;
+	
 
 	Waypoint currentWaypoint; 
 	Waypoint destinationWaypoint;
 	BoardProcessor board;
-	TurnHandler turnHandler;
+	TurnManager turnManager;
+	MovePipeline movePipeline;
+
+	int cardIndex = 0;
+	int playerTurn;
+    public List<CardConfig> cards; //TODO make getter/setter
 
 	void Start(){
-		turnHandler = FindObjectOfType<TurnHandler>();
+		turnManager = FindObjectOfType<TurnManager>();
+		movePipeline = GetComponent<MovePipeline>();
 		SetupInitialBoardPosition ();
+		playerTurn = startingTurn - 1;
+        cards = movePipeline.getCards(); //TODO Get/SET a NEW set of cards
 	}
 
 	void SetupInitialBoardPosition ()
@@ -25,6 +37,19 @@ public class BotMovement : MonoBehaviour {
 		currentWaypoint = board.GetNearestWaypoint (transform.position.x, transform.position.z, waypointThreshold);
 		transform.position = currentWaypoint.transform.position;
 		destinationWaypoint = currentWaypoint;
+	}
+
+	//TODO Consider moving to BotMovement
+	void Update()
+	{
+		bool cardsStillLeft = (cards.Count > cardIndex); //Are cards left?
+		bool isCurrentBotsTurn = (this == turnManager.getActiveTurn()); //Bot is in the current queue (prevents simulatenous play)
+		bool playerHasFinishedPreviousTurn = (playerTurn == turnManager.CurrentTurn); //Prevents the bot from going to next move before it's done
+		//print(cardsStillLeft.ToString() + " / " + isCurrentBotsTurn.ToString() + "/ " + playerHasNotTakenTurn.ToString());
+		if (playerHasFinishedPreviousTurn && isCurrentBotsTurn && cardsStillLeft)
+		{
+			HandleActions();
+		}
 	}
 
 	public void SetCurrentWaypoint(Waypoint waypoint){
@@ -41,14 +66,13 @@ public class BotMovement : MonoBehaviour {
 		return destinationWaypoint;
 	}
 
-	public void MoveToWaypoint(Vector2Int position){
-		MoveToWaypoint(position.x, position.y);
+	private void HandleActions()
+	{
+		movePipeline.RunCommand(cardIndex, this);
+		StartCoroutine(this.HandleMovement());
+		cardIndex++;
+		playerTurn++;
 	}
-
-	public void MoveToWaypoint(int x, int y){
-		destinationWaypoint = SetDestinationWaypoint(x, y);		
-	}
-
 
     //TODO Handle going over the board
     public IEnumerator HandleMovement()
@@ -62,9 +86,8 @@ public class BotMovement : MonoBehaviour {
 			yield return new WaitForEndOfFrame();
 		}
         FixPositionToWaypoint();
-		turnHandler.submitTurn(this);
+		turnManager.submitTurn(this);
     }
-
 
     private void FixPositionToWaypoint()
     {
@@ -104,4 +127,24 @@ public class BotMovement : MonoBehaviour {
 		Debug.LogWarning ("invalid direction");
 		return new Vector2Int (0, 0);
 	}
+
+	public void ProcessNextRound()
+        {
+            playerTurn = startingTurn;
+            cardIndex = 0;
+            ClearProcessor();
+            //TODO Add new round as well?
+        }
+
+
+        public void ClearProcessor()
+        {
+            cards.Clear();
+        }
+
+        public void AddCardToProcessor(CardConfig card)
+        {
+            cards.Add(card);
+        }
+}
 }

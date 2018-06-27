@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Robo.Bots;
 
 namespace Robo.Commands{
     public abstract class CardConfig : ScriptableObject
