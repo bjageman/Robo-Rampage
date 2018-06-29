@@ -19,6 +19,9 @@ public class TurnManager : MonoBehaviour {
 	public int CurrentRound { get { return currentRound; }}
 	public int NumberOfCardsPlayedPerRound { get { return numberOfTurnsPerRound; }}
 
+	public delegate void OnTurnEnd();
+	public event OnTurnEnd onTurnEnd;
+
 	void Start ()
     {
         AddPlayersToQueue();
@@ -66,7 +69,7 @@ public class TurnManager : MonoBehaviour {
 		}else{
 	        currentTurn++;
 		}
-		print("Send End of Turn Observer");
+		onTurnEnd();
 		AddPlayersToQueue();
     }
 }

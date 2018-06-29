@@ -11,10 +11,12 @@ namespace Robo.Commands{
         [SerializeField] string cardName;
         [SerializeField] int cardCost;
         [SerializeField] Sprite cardSprite;
+        [SerializeField] bool destroyCardAfterPlaying = false;
 
         public string CardName { get { return cardName; } }
         public int CardCost { get { return cardCost; } }
         public Sprite CardSprite { get { return cardSprite; } }
+        public bool DestroyCardAfterPlaying { get { return destroyCardAfterPlaying; } }
 
         protected CardBehavior behavior;
 

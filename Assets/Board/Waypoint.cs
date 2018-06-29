@@ -27,5 +27,12 @@ namespace Robo.Board{
 				bot.SetCurrentWaypoint(this);
 			}
 		}
+
+	}
+
+	//TODO Consider making scriptableobjects
+	interface IObstacle
+	{
+    	void endTurnTrigger(BotMovement Bot);
 	}
 }

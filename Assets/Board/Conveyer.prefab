@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 65492818301023084}
   - component: {fileID: 54058742721094112}
   - component: {fileID: 114119088083979796}
-  - component: {fileID: 114721328445816484}
+  - component: {fileID: 114273085439186850}
   m_Layer: 0
   m_Name: Conveyer
   m_TagString: Untagged
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0383906d964a43a5f216a368dcc6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114721328445816484
+--- !u!114 &114273085439186850
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -177,6 +177,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1504145550132622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08b5edec068868b4ea78eae0629ea6fb, type: 3}
+  m_Script: {fileID: 11500000, guid: deee8cef3ab416242bc598dfa75e81d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpaces: 1
+  direction: {x: 0, y: 0}

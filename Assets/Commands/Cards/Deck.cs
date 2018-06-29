@@ -19,11 +19,13 @@ namespace Robo.Commands{
 			for(int i = 0; i < numCardsToDraw; i++){
 				if (cardsInDeck.Count == 0){
 					ShuffleDiscardInToDeck();
+					if (cardsInDeck.Count == 0){ break; } //Break if there are absolutely 0 cards left in the deck
 				}
 				int cardPosition = UnityEngine.Random.Range(0, cardsInDeck.Count - 1);
 				cardsDrawn.Add(cardsInDeck[cardPosition]);
 				cardsInDeck.RemoveAt(cardPosition);
 			}
+			print(cardsDrawn);
 			return cardsDrawn;
 		}
 

@@ -40,6 +40,7 @@ namespace Robo.Bots
             SetupInitialBoardPosition();
             playerTurn = startingTurn - 1;
             cards = movePipeline.getCards(); //TODO Get/SET a NEW set of cards
+            turnManager.onTurnEnd += OnTurnEnd;
         }
 
         void SetupInitialBoardPosition()
@@ -145,5 +146,12 @@ namespace Robo.Bots
 
         public void ClearProcessor() { cards.Clear(); }
         public void AddCardToProcessor(CardConfig card) { cards.Add(card); }
+
+        void OnTurnEnd(){
+            //TODO Make this look up any obstactle attached to a waypoint
+            if (currentWaypoint.GetComponent<IObstacle>() != null){
+                currentWaypoint.GetComponent<IObstacle>().endTurnTrigger(this);
+            }
+        }
     }
 }

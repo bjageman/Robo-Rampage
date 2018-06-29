@@ -39,7 +39,9 @@ namespace Robo.Commands{
 			foreach (Card card in cards)
 			{
 				bot.AddCardToProcessor(card.GetCardConfig);
-				deck.DiscardCard(card.GetCardConfig);
+				if (!card.GetCardConfig.DestroyCardAfterPlaying){
+					deck.DiscardCard(card.GetCardConfig);
+				}
 				Destroy(card.gameObject);
 			}
 		}
