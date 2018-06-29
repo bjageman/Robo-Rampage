@@ -33,6 +33,7 @@ namespace Robo.Board{
 	//TODO Consider making scriptableobjects
 	interface IObstacle
 	{
+		string GetObstacleName();
     	void endTurnTrigger(BotMovement Bot);
 	}
 }

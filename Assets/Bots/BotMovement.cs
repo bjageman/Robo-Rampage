@@ -67,13 +67,13 @@ namespace Robo.Bots
         private void HandleActions()
         {
             movePipeline.RunCommand(cardIndex, this);
-            StartCoroutine(this.HandleMovement());
+            StartCoroutine(HandleMovement());
             cardIndex++;
             playerTurn++;
         }
 
         //TODO Going over the board should lead to death
-        public IEnumerator HandleMovement()
+        public IEnumerator HandleMovement(bool submitTurn = true) //TODO Handle this parameter better
         {
             float distanceBetweenWaypoints = (transform.position - destinationWaypoint.transform.position).magnitude;
             while (distanceBetweenWaypoints > waypointThreshold)
@@ -84,7 +84,10 @@ namespace Robo.Bots
                 yield return new WaitForEndOfFrame();
             }
             FixPositionToWaypoint();
-            turnManager.submitTurn(this);
+            print("moved bot");
+            if (submitTurn){
+                turnManager.submitTurn(this);
+            }         
         }
 
         private void FixPositionToWaypoint()

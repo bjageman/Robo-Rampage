@@ -25,7 +25,6 @@ namespace Robo.Commands{
 				cardsDrawn.Add(cardsInDeck[cardPosition]);
 				cardsInDeck.RemoveAt(cardPosition);
 			}
-			print(cardsDrawn);
 			return cardsDrawn;
 		}
 
