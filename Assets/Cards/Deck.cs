@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Robo.Commands{
+namespace Robo.Cards{
 	public class Deck : MonoBehaviour {
 		[SerializeField] List<CardConfig> cardsInDeck;
 		

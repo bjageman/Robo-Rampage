@@ -5,7 +5,7 @@ using UnityEngine;
 using Robo.Bots;
 
 //TODO Maybe combine Register and TurnHandler
-namespace Robo.Commands{
+namespace Robo.Cards{
 	public class Register : MonoBehaviour {
 
 		[SerializeField] BotMovement bot;

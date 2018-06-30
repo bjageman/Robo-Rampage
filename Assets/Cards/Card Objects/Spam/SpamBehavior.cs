@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Robo.Bots;
 
-namespace Robo.Commands{
+namespace Robo.Cards{
 	public class SpamBehavior : CardBehavior {
 
 		Vector2Int direction;

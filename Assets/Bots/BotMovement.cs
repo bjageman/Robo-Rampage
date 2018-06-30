@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Robo.Board;
-using Robo.Commands;
+using Robo.Cards;
 
 namespace Robo.Bots
 {
@@ -57,7 +57,6 @@ namespace Robo.Bots
             bool cardsStillLeft = (cards.Count > cardIndex); //Are cards left?
             bool isCurrentBotsTurn = (this == turnManager.getActiveTurn()); //Bot is in the current queue (prevents simulatenous play)
             bool playerHasFinishedPreviousTurn = (playerTurn == turnManager.CurrentTurn); //Prevents the bot from going to next move before it's done
-                                                                                          //print(cardsStillLeft.ToString() + " / " + isCurrentBotsTurn.ToString() + "/ " + playerHasNotTakenTurn.ToString());
             if (playerHasFinishedPreviousTurn && isCurrentBotsTurn && cardsStillLeft)
             {
                 HandleActions();
@@ -84,7 +83,6 @@ namespace Robo.Bots
                 yield return new WaitForEndOfFrame();
             }
             FixPositionToWaypoint();
-            print("moved bot");
             if (submitTurn){
                 turnManager.submitTurn(this);
             }         
@@ -94,6 +92,7 @@ namespace Robo.Bots
         {
             var nearestWaypoint = board.GetNearestWaypoint(transform.position.x, transform.position.z, waypointThreshold);
             transform.position = nearestWaypoint.transform.position;
+            currentWaypoint = nearestWaypoint;
         }
 
         //TODO Animate rotations
@@ -154,6 +153,8 @@ namespace Robo.Bots
             //TODO Make this look up any obstactle attached to a waypoint
             if (currentWaypoint.GetComponent<IObstacle>() != null){
                 currentWaypoint.GetComponent<IObstacle>().endTurnTrigger(this);
+            }else{
+                turnManager.submitObstacleAction();
             }
         }
     }

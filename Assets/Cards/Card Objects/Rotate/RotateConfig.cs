@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Robo.Commands{
+namespace Robo.Cards{
     [CreateAssetMenu(menuName = "Cards/Rotate")]
     public class RotateConfig : CardConfig
     {

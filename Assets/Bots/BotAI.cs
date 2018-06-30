@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Robo.Commands;
+using Robo.Cards;
 
 namespace Robo.Bots
 {

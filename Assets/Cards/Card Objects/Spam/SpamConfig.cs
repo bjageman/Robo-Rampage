@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Robo.Commands{
+namespace Robo.Cards{
     [CreateAssetMenu(menuName = "Cards/Spam")]
     public class SpamConfig : CardConfig
     {

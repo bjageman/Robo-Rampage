@@ -4,6 +4,7 @@ using UnityEngine;
 using Robo.Bots; 
 
 namespace Robo.Board{
+	[SelectionBase]
 	public class Waypoint : MonoBehaviour {
 
 		float waypointSize = 0.1f;
@@ -26,6 +27,11 @@ namespace Robo.Board{
 			if (bot){
 				bot.SetCurrentWaypoint(this);
 			}
+		}
+
+		protected void SubmitObstacleAction(){
+			TurnManager turnManager = FindObjectOfType<TurnManager>();
+            turnManager.submitObstacleAction();
 		}
 
 	}

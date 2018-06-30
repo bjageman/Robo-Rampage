@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Robo.Bots;
-using Robo.Commands;
+using Robo.Cards;
 
 namespace Robo.Board{
 	public class LaserGrid : Waypoint, IObstacle {

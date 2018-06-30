@@ -6,6 +6,7 @@ using System;
 
 //TODO Make this a scriptableobject
 namespace Robo.Board{
+	[SelectionBase]
 	public class ConveyerBelt : Waypoint, IObstacle {
 		[SerializeField] Vector2Int direction = new Vector2Int(0,1);
 		
@@ -28,7 +29,6 @@ namespace Robo.Board{
                 Mathf.RoundToInt(bot.transform.position.z + moveDirectionPower.y)
             );
             var destination = bot.SetDestinationWaypoint(movePosition);
-			print("Moving conveyer");
 			StartCoroutine(bot.HandleMovement(false));
         }
     }

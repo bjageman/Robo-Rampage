@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Robo.Bots;
 
-namespace Robo.Commands{
+namespace Robo.Cards{
     public class MoveBehavior : CardBehavior {
 
         Vector2Int direction;
@@ -19,6 +19,7 @@ namespace Robo.Commands{
 
         private void MoveBot(BotMovement bot, int moveSpaces)
         {
+            
             var moveDirectionPower = new Vector2Int(direction.x * moveSpaces, direction.y * moveSpaces);
             movePosition = new Vector2Int(
                 Mathf.RoundToInt(bot.transform.position.x + moveDirectionPower.x),
@@ -27,7 +28,7 @@ namespace Robo.Commands{
             var destination = bot.SetDestinationWaypoint(movePosition);
             if (destination == null){
                 MoveBot(bot, moveSpaces -1);
-            }
+            }   
         }
     }
 }

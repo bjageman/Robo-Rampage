@@ -12,6 +12,7 @@ public class TurnManager : MonoBehaviour {
 	int startingTurn = 1;
 	int currentTurn;
 	int currentRound = 1;
+	int obstacleActionsRequired;
 	//TODO Change to Queue
 	List<BotMovement> players;
 
@@ -44,6 +45,7 @@ public class TurnManager : MonoBehaviour {
 				players.Add(playerToSort);
 			}
 		}
+		obstacleActionsRequired = players.Count;
     }
 
     public BotMovement getActiveTurn(){
@@ -61,15 +63,19 @@ public class TurnManager : MonoBehaviour {
 		}
 	}
 
+	public void submitObstacleAction(){
+		obstacleActionsRequired--;
+	}
+
     private void nextTurn()
     {
+		onTurnEnd();
 		if (currentTurn == numberOfTurnsPerRound){
 			currentTurn = startingTurn;
 			currentRound++;
 		}else{
 	        currentTurn++;
 		}
-		onTurnEnd();
 		AddPlayersToQueue();
     }
 }

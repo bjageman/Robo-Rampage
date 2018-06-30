@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Robo.CameraUI; //TODO Consider refactor
 
-namespace Robo.Commands{
+namespace Robo.Cards{
 	public class Hand : MonoBehaviour {
 		[SerializeField] Deck deck; 
 		[SerializeField] Card cardPrefab;

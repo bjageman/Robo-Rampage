@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Robo.Bots;
 
-namespace Robo.Commands{
+namespace Robo.Cards{
     public abstract class CardConfig : ScriptableObject
     {
 
