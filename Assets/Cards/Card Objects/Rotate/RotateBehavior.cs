@@ -10,8 +10,8 @@ namespace Robo.Cards{
 		Vector2Int movePosition;
 
 		public override void Use(BotMovement bot){
-			bot.RotateBot((config as RotateConfig).NumRotations);
-			Destroy(this); //TODO Only destroys the latest CardBehavior to be initialized
+			bot.AddCommandToQueue(new Command("ROTATE", null, (config as RotateConfig).NumRotations));
+			Destroy(bot.GetComponent<RotateBehavior>());
 		}
 		
 	}

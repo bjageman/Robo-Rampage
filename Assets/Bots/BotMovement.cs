@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Robo.Board;
 using Robo.Cards;
+using System;
 
 namespace Robo.Bots
 {
@@ -11,15 +12,19 @@ namespace Robo.Bots
     {
         [SerializeField] Vector2Int currentDirection;
         [SerializeField] float moveSpeed = .5f;
-        [SerializeField] [Range(.01f, .5f)] float waypointThreshold = .1f;
+        [SerializeField] [Range(.01f, .5f)] public float waypointThreshold = .1f; //TODO Make Getter
         [SerializeField] int startingTurn = 1;
 
         Waypoint currentWaypoint;
         Waypoint destinationWaypoint;
         BoardProcessor board;
         TurnManager turnManager;
-        MovePipeline movePipeline;
+        Queue<Command> commandQueue = new Queue<Command>();
+        Command currentCommand;
+        
 
+        bool actionSubmitted = false;
+        bool botIsMoving = false;
         int cardIndex = 0;
         int playerTurn;
         public List<CardConfig> cards; //TODO make getter/setter
@@ -36,10 +41,9 @@ namespace Robo.Bots
         void Start()
         {
             turnManager = FindObjectOfType<TurnManager>();
-            movePipeline = GetComponent<MovePipeline>();
             SetupInitialBoardPosition();
             playerTurn = startingTurn - 1;
-            cards = movePipeline.getCards(); //TODO Get/SET a NEW set of cards
+            cards = new List<CardConfig>();
             turnManager.onTurnEnd += OnTurnEnd;
         }
 
@@ -65,30 +69,70 @@ namespace Robo.Bots
 
         private void HandleActions()
         {
-            movePipeline.RunCommand(cardIndex, this);
-            StartCoroutine(HandleMovement());
+            if (!actionSubmitted){
+                PlayCard(cardIndex);
+                actionSubmitted = true;
+            }
+            if (currentCommand.action == null){
+                GetNewCommandInQueue();
+            }else{
+                if (currentCommand.action == "MOVE"){
+                    MoveToWaypoint(currentCommand.waypoint);
+                }else if (currentCommand.action == "ROTATE"){
+                    RotateBot(currentCommand.amount); //TODO set to var
+                }
+            }
+            
+        }
+
+        public void AddCommandToQueue(Command command){
+            commandQueue.Enqueue(command);
+        }
+
+        private void GetNewCommandInQueue()
+        {
+            if (commandQueue.Count > 0){
+                currentCommand = commandQueue.Dequeue();
+            }else
+            {
+                TurnCompleted();
+            }
+
+        }
+
+        private void TurnCompleted()
+        {
+            currentCommand.action = null;
+            actionSubmitted = false;
             cardIndex++;
             playerTurn++;
         }
 
-        //TODO Going over the board should lead to death
-        public IEnumerator HandleMovement(bool submitTurn = true) //TODO Handle this parameter better
-        {
-            float distanceBetweenWaypoints = (transform.position - destinationWaypoint.transform.position).magnitude;
-            while (distanceBetweenWaypoints > waypointThreshold)
-            {
-                float step = moveSpeed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, destinationWaypoint.transform.position, step);
-                distanceBetweenWaypoints = (transform.position - destinationWaypoint.transform.position).magnitude;
-                yield return new WaitForEndOfFrame();
-            }
-            FixPositionToWaypoint();
-            if (submitTurn){
-                turnManager.submitTurn(this);
-            }         
+        public void FinishAction(){
+            actionSubmitted = false;
         }
 
-        private void FixPositionToWaypoint()
+        public void PlayCard(int cardIndex){
+			cards[cardIndex].AttachAbilityTo(gameObject);
+			cards[cardIndex].Use(this);
+		}
+
+        //TODO Going over the board should lead to death
+        public void MoveToWaypoint(Waypoint destination) //TODO Handle this parameter better
+        {
+            float distanceBetweenWaypoints = (transform.position - destination.transform.position).magnitude;
+            if (distanceBetweenWaypoints > waypointThreshold)
+            {
+                float step = moveSpeed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, step);
+                distanceBetweenWaypoints = (transform.position - destination.transform.position).magnitude;
+            }else{
+                FixPositionToWaypoint();
+                currentCommand.action = null;
+            }
+        }
+
+        public void FixPositionToWaypoint()
         {
             var nearestWaypoint = board.GetNearestWaypoint(transform.position.x, transform.position.z, waypointThreshold);
             transform.position = nearestWaypoint.transform.position;
@@ -105,6 +149,7 @@ namespace Robo.Bots
                 0f,
                 zRotation
             );
+            GetNewCommandInQueue();
         }
 
         //TODO Try replacing with .forward direction
@@ -158,4 +203,16 @@ namespace Robo.Bots
             }
         }
     }
+    public struct Command  
+    {  
+        public string action;  
+        public Waypoint waypoint;  
+        public int amount;
+        public Command(string p1, Waypoint p2, int p3 = 0)
+        {
+            action = p1;
+            waypoint = p2;
+            amount = p3;
+        }
+    }  
 }
