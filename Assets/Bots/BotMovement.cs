@@ -21,6 +21,9 @@ namespace Robo.Bots
         Queue<Command> commandQueue = new Queue<Command>();
         Command currentCommand;
         
+        bool rotationStarted = false;
+        float desiredRotation;
+        Quaternion finalRotation;
 
         bool actionSubmitted = false;
         int cardIndex = 0;
@@ -147,31 +150,38 @@ namespace Robo.Bots
             currentWaypoint = nearestWaypoint;
         }
 
-        //TODO Animate rotations
-        //TODO Rotation is bugged
+        // TODO Animate rotations
+        // TODO Rotation is bugged
         public void RotateBot(int numRotations)
         {
-            int zRotation = Mathf.RoundToInt(transform.rotation.z) + (90 * numRotations);
-            print(transform.rotation);            
+            int zRotation = 90 * numRotations;
             transform.Rotate(
                 0f,
                 0f,
                 zRotation
             );
-            print(transform.rotation);
+
             GetNewCommandInQueue();
         }
 
-        public void NewRotateBot(int numRotations)
-        {
-            int zRotation = Mathf.RoundToInt(transform.rotation.z) + (90 * numRotations);
-            transform.Rotate(
-                0f,
-                0f,
-                zRotation
-            );
-            GetNewCommandInQueue();
-        }
+        // public void RotateBot(int numRotations)
+        // {
+        //     int rotationInDegrees = 90 * numRotations;
+        //     if (rotationStarted){
+        //         finalRotation = Quaternion.Euler( 0, rotationInDegrees, 0 ) * transform.rotation;
+        //         print(Mathf.Abs(transform.rotation.eulerAngles.y - desiredRotation));
+        //         if (transform.rotation != finalRotation){
+        //             transform.rotation = Quaternion.Lerp(transform.rotation, finalRotation, Time.deltaTime * moveSpeed);
+        //         }else{
+        //             rotationStarted = false;
+        //             GetNewCommandInQueue();
+        //         }
+        //     }else{
+        //         rotationStarted = true;
+        //         desiredRotation = transform.rotation.eulerAngles.y + rotationInDegrees;
+        //         print(rotationInDegrees + "  / " + desiredRotation);
+        //     }
+        // }
 
         //TODO Try replacing with .forward direction
         public Vector2Int GetFacingDirection()
