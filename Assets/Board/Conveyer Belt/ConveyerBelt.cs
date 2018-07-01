@@ -18,13 +18,16 @@ namespace Robo.Board{
 		}
 
 		public void endTurnTrigger(BotMovement bot){
+			print("Conveyer activated");
 			BoardProcessor board = FindObjectOfType<BoardProcessor>();
+			TurnManager turnManager = FindObjectOfType<TurnManager>();
 			Vector3 botPosition = bot.transform.position;
 			Waypoint moveToWaypoint = board.GetNearestWaypoint(new Vector2Int(
                 Mathf.RoundToInt(botPosition.x + direction.x),
                 Mathf.RoundToInt(botPosition.z + direction.y)
             ));
 			bot.AddCommandToQueue(new Command("MOVE", moveToWaypoint));
+			turnManager.AddPlayerToQueue(bot);
 		}
     }
 }

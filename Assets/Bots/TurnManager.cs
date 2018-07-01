@@ -13,12 +13,15 @@ public class TurnManager : MonoBehaviour {
 	int currentTurn;
 	int currentRound = 1;
 	List<BotMovement> players;
+	bool obstaclesActivated = false;
+
 
 	public int CurrentTurn { get { return currentTurn; }}
 	public int CurrentRound { get { return currentRound; }}
 	public int NumberOfCardsPlayedPerRound { get { return numberOfTurnsPerRound; }}
+	public bool ObstaclesActivated { get { return obstaclesActivated; }}
 
-	bool obstaclesActivated = false;
+
 
 	public delegate void ActivateObstacles();
 	public event ActivateObstacles onActivateObstacles;
@@ -64,7 +67,7 @@ public class TurnManager : MonoBehaviour {
 
 	public void submitTurn(BotMovement player){
 		for (int i = players.Count - 1; i >= 0; i--){
-			if (player.gameObject.name == players[i].gameObject.name){
+			if (GameObject.ReferenceEquals(player.gameObject, players[i].gameObject)){
 				players.Remove(players[i]);
 			}
 		}
@@ -73,22 +76,24 @@ public class TurnManager : MonoBehaviour {
 				obstaclesActivated = false;
 				nextTurn();
 			}else{
-				onActivateObstacles();
-				AddPlayersToQueue();
 				obstaclesActivated = true;
+				print("activating obstacles");
+				onActivateObstacles();
 			}
 			
 		}
 	}
 
+	//TODO Set up an observer
     private void nextTurn()
     {
 		if (currentTurn == numberOfTurnsPerRound){
+			print("ROUND COMPLETE");
 			currentTurn = startingTurn;
 			currentRound++;
 		}else{
-	        currentTurn++;
+			currentTurn++;
+	        AddPlayersToQueue();
 		}
-		print("Turn COMPLETE");
     }
 }

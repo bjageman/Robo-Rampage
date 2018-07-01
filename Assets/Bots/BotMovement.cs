@@ -85,11 +85,19 @@ namespace Robo.Bots
 
         private void GetNewCommandInQueue()
         {
+            currentCommand.action = null;
             if (commandQueue.Count > 0){
                 currentCommand = commandQueue.Dequeue();
-            }else
+            }
+            else
             {
-                TurnCompleted();
+                if (turnManager.ObstaclesActivated){
+                    TurnCompleted();
+                }
+                print("turn w/o obstacles");
+                turnManager.submitTurn(this);
+                //TODO Will be changed to an observer
+                
             }
         }
 
@@ -98,7 +106,7 @@ namespace Robo.Bots
             currentCommand.action = null;
             actionSubmitted = false;
             cardIndex++;
-            turnManager.submitTurn(this);
+            print("TURN COMPLETE");
         }
 
         public void ProcessNextRound()
@@ -142,15 +150,16 @@ namespace Robo.Bots
         }
 
         //TODO Animate rotations
+        //TODO Rotation is bugged
         public void RotateBot(int numRotations)
         {
             int zRotation = Mathf.RoundToInt(transform.rotation.z) + (90 * numRotations);
-            //todo Set direction facing with rotation
             transform.Rotate(
                 0f,
                 0f,
                 zRotation
             );
+            print("rotated " + numRotations);
             GetNewCommandInQueue();
         }
 
@@ -192,7 +201,7 @@ namespace Robo.Bots
             if (currentWaypoint.GetComponent<IObstacle>() != null){
                 currentWaypoint.GetComponent<IObstacle>().endTurnTrigger(this);
             }else{
-                turnManager.submitTurn(this);
+                turnManager.AddPlayerToQueue(this);
             }
         }
     }

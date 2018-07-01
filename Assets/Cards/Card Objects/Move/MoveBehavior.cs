@@ -19,7 +19,6 @@ namespace Robo.Cards{
             Vector3 previousPosition = bot.transform.position;
             for (int i = 0; i < (config as MoveConfig).MoveSpaces; i++){
                 Waypoint nextWaypoint = GetForwardDirectionWaypoint(previousPosition);
-                print(nextWaypoint);
                 if (nextWaypoint != null){
                      MoveBot(bot, nextWaypoint);
                      previousPosition = nextWaypoint.transform.position;
