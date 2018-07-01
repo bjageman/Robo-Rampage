@@ -29,11 +29,6 @@ namespace Robo.Board{
 			}
 		}
 
-		protected void SubmitObstacleAction(){
-			TurnManager turnManager = FindObjectOfType<TurnManager>();
-            turnManager.submitObstacleAction();
-		}
-
 	}
 
 	//TODO Consider making scriptableobjects

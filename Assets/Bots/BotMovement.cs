@@ -13,7 +13,6 @@ namespace Robo.Bots
         [SerializeField] Vector2Int currentDirection;
         [SerializeField] float moveSpeed = .5f;
         [SerializeField] [Range(.01f, .5f)] public float waypointThreshold = .1f; //TODO Make Getter
-        [SerializeField] int startingTurn = 1;
 
         Waypoint currentWaypoint;
         Waypoint destinationWaypoint;
@@ -24,9 +23,7 @@ namespace Robo.Bots
         
 
         bool actionSubmitted = false;
-        bool botIsMoving = false;
         int cardIndex = 0;
-        int playerTurn;
         public List<CardConfig> cards; //TODO make getter/setter
 
         public void SetCurrentWaypoint(Waypoint waypoint) { currentWaypoint = waypoint; }
@@ -42,9 +39,8 @@ namespace Robo.Bots
         {
             turnManager = FindObjectOfType<TurnManager>();
             SetupInitialBoardPosition();
-            playerTurn = startingTurn - 1;
             cards = new List<CardConfig>();
-            turnManager.onTurnEnd += OnTurnEnd;
+            turnManager.onActivateObstacles += OnActivateObstacles;
         }
 
         void SetupInitialBoardPosition()
@@ -58,10 +54,8 @@ namespace Robo.Bots
         //TODO Consider moving to BotMovement
         void Update()
         {
-            bool cardsStillLeft = (cards.Count > cardIndex); //Are cards left?
             bool isCurrentBotsTurn = (this == turnManager.getActiveTurn()); //Bot is in the current queue (prevents simulatenous play)
-            bool playerHasFinishedPreviousTurn = (playerTurn == turnManager.CurrentTurn); //Prevents the bot from going to next move before it's done
-            if (playerHasFinishedPreviousTurn && isCurrentBotsTurn && cardsStillLeft)
+            if (isCurrentBotsTurn)
             {
                 HandleActions();
             }
@@ -97,7 +91,6 @@ namespace Robo.Bots
             {
                 TurnCompleted();
             }
-
         }
 
         private void TurnCompleted()
@@ -105,16 +98,25 @@ namespace Robo.Bots
             currentCommand.action = null;
             actionSubmitted = false;
             cardIndex++;
-            playerTurn++;
+            turnManager.submitTurn(this);
         }
+
+        public void ProcessNextRound()
+        {
+            cardIndex = 0;
+            cards.Clear();
+        }
+
 
         public void FinishAction(){
             actionSubmitted = false;
         }
 
         public void PlayCard(int cardIndex){
-			cards[cardIndex].AttachAbilityTo(gameObject);
-			cards[cardIndex].Use(this);
+            if (cardIndex < cards.Count){
+                cards[cardIndex].AttachAbilityTo(gameObject);
+			    cards[cardIndex].Use(this);
+            }
 		}
 
         //TODO Going over the board should lead to death
@@ -128,7 +130,7 @@ namespace Robo.Bots
                 distanceBetweenWaypoints = (transform.position - destination.transform.position).magnitude;
             }else{
                 FixPositionToWaypoint();
-                currentCommand.action = null;
+                GetNewCommandInQueue();
             }
         }
 
@@ -183,23 +185,14 @@ namespace Robo.Bots
             return new Vector2Int(0, 0);
         }
 
-        public void ProcessNextRound()
-        {
-            playerTurn = startingTurn;
-            cardIndex = 0;
-            ClearProcessor();
-            //TODO Add new round as well?
-        }
-
-        public void ClearProcessor() { cards.Clear(); }
         public void AddCardToProcessor(CardConfig card) { cards.Add(card); }
 
-        void OnTurnEnd(){
+        void OnActivateObstacles(){
             //TODO Make this look up any obstactle attached to a waypoint
             if (currentWaypoint.GetComponent<IObstacle>() != null){
                 currentWaypoint.GetComponent<IObstacle>().endTurnTrigger(this);
             }else{
-                turnManager.submitObstacleAction();
+                turnManager.submitTurn(this);
             }
         }
     }

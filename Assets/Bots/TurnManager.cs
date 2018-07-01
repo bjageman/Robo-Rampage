@@ -12,22 +12,30 @@ public class TurnManager : MonoBehaviour {
 	int startingTurn = 1;
 	int currentTurn;
 	int currentRound = 1;
-	int obstacleActionsRequired;
-	//TODO Change to Queue
 	List<BotMovement> players;
 
 	public int CurrentTurn { get { return currentTurn; }}
 	public int CurrentRound { get { return currentRound; }}
 	public int NumberOfCardsPlayedPerRound { get { return numberOfTurnsPerRound; }}
 
-	public delegate void OnTurnEnd();
-	public event OnTurnEnd onTurnEnd;
+	bool obstaclesActivated = false;
+
+	public delegate void ActivateObstacles();
+	public event ActivateObstacles onActivateObstacles;
+
+	void Awake() {
+		//TODO Enforce singleton
+	}
 
 	void Start ()
     {
-        AddPlayersToQueue();
         currentTurn = startingTurn;
+		players = new List<BotMovement>();
     }
+
+	public void AddPlayerToQueue(BotMovement newPlayer){
+		players.Add(newPlayer);
+	}
 
 	//TODO Make this more elegant
     private void AddPlayersToQueue()
@@ -45,11 +53,13 @@ public class TurnManager : MonoBehaviour {
 				players.Add(playerToSort);
 			}
 		}
-		obstacleActionsRequired = players.Count;
     }
 
     public BotMovement getActiveTurn(){
-		return players[0];
+		if (players.Count > 0){
+			return players[0];
+		}
+		return null;
 	}
 
 	public void submitTurn(BotMovement player){
@@ -59,23 +69,26 @@ public class TurnManager : MonoBehaviour {
 			}
 		}
 		if (players.Count == 0){
-			nextTurn();
+			if (obstaclesActivated){
+				obstaclesActivated = false;
+				nextTurn();
+			}else{
+				onActivateObstacles();
+				AddPlayersToQueue();
+				obstaclesActivated = true;
+			}
+			
 		}
-	}
-
-	public void submitObstacleAction(){
-		obstacleActionsRequired--;
 	}
 
     private void nextTurn()
     {
-		onTurnEnd();
 		if (currentTurn == numberOfTurnsPerRound){
 			currentTurn = startingTurn;
 			currentRound++;
 		}else{
 	        currentTurn++;
 		}
-		AddPlayersToQueue();
+		print("Turn COMPLETE");
     }
 }

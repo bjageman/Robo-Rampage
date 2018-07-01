@@ -13,7 +13,6 @@ namespace Robo.Bots
 
         BotMovement bot;
         TurnManager turnManager;
-        List<CardConfig> cards;
 
         void Start(){
             turnManager = FindObjectOfType<TurnManager>();
@@ -31,23 +30,12 @@ namespace Robo.Bots
         public void ProcessAIMoves()
 		{
 			DrawAndPlayAllCards();
-			bot.ProcessNextRound();
-            HandleCardCommandsInRegister();	       	
-		}
-
-		private void HandleCardCommandsInRegister()
-		{
-			foreach (CardConfig card in cards)
-			{
-				bot.AddCardToProcessor(card);
-				deck.DiscardCard(card);
-			}
 		}
 
         //TODO rework later
         public void DrawAndPlayAllCards()
         {
-            cards = deck.DrawCards(turnManager.NumberOfCardsPlayedPerRound);
+            bot.cards = deck.DrawCards(turnManager.NumberOfCardsPlayedPerRound);
         }
     }
 }

@@ -24,7 +24,6 @@ GameObject:
   - component: {fileID: 54247466186797846}
   - component: {fileID: 65351286307657446}
   - component: {fileID: 114327352370008568}
-  - component: {fileID: 114768656774756536}
   - component: {fileID: 114431279006674694}
   - component: {fileID: 114803790281397844}
   m_Layer: 0
@@ -41,7 +40,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1553071937816608}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 3.91, y: 0, z: 1.1}
+  m_LocalPosition: {x: -2.011134, y: -0.24999999, z: 3.9049768}
   m_LocalScale: {x: 0.3, y: 0.30000025, z: 0.30000025}
   m_Children: []
   m_Father: {fileID: 0}
@@ -127,7 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a5aae498bee0b3429d40cbbfa0f0ceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deck: {fileID: 0}
 --- !u!114 &114431279006674694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -144,19 +142,6 @@ MonoBehaviour:
   waypointThreshold: 0.1
   startingTurn: 1
   cards: []
---- !u!114 &114768656774756536
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1553071937816608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91bd00786b660b3498c0bb7ea5e486b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cards: []
-  commandRunning: 0
 --- !u!114 &114803790281397844
 MonoBehaviour:
   m_ObjectHideFlags: 1

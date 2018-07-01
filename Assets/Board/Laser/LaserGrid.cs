@@ -6,9 +6,6 @@ using Robo.Cards;
 
 namespace Robo.Board{
 	public class LaserGrid : Waypoint, IObstacle {
-		[SerializeField] int moveSpaces = 1;
-		[SerializeField] Vector2Int direction = new Vector2Int(0,1);
-
 		[SerializeField] CardConfig spamCard;
 
 		public string GetObstacleName(){

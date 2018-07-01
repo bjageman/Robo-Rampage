@@ -19,6 +19,7 @@ namespace Robo.Cards{
 			turnHandler = FindObjectOfType<TurnManager>();
 		}
 
+		//Run when clicked "SUBMIT"
 		public void ProcessRegister()
 		{
 			cards = GetComponentsInChildren<Card>();
@@ -42,6 +43,7 @@ namespace Robo.Cards{
 				if (!card.GetCardConfig.DestroyCardAfterPlaying){
 					deck.DiscardCard(card.GetCardConfig);
 				}
+				turnHandler.AddPlayerToQueue(bot);
 				Destroy(card.gameObject);
 			}
 		}
