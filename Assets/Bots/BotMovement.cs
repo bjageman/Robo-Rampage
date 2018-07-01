@@ -94,7 +94,6 @@ namespace Robo.Bots
                 if (turnManager.ObstaclesActivated){
                     TurnCompleted();
                 }
-                print("turn w/o obstacles");
                 turnManager.submitTurn(this);
                 //TODO Will be changed to an observer
                 
@@ -106,7 +105,6 @@ namespace Robo.Bots
             currentCommand.action = null;
             actionSubmitted = false;
             cardIndex++;
-            print("TURN COMPLETE");
         }
 
         public void ProcessNextRound()
@@ -154,12 +152,24 @@ namespace Robo.Bots
         public void RotateBot(int numRotations)
         {
             int zRotation = Mathf.RoundToInt(transform.rotation.z) + (90 * numRotations);
+            print(transform.rotation);            
             transform.Rotate(
                 0f,
                 0f,
                 zRotation
             );
-            print("rotated " + numRotations);
+            print(transform.rotation);
+            GetNewCommandInQueue();
+        }
+
+        public void NewRotateBot(int numRotations)
+        {
+            int zRotation = Mathf.RoundToInt(transform.rotation.z) + (90 * numRotations);
+            transform.Rotate(
+                0f,
+                0f,
+                zRotation
+            );
             GetNewCommandInQueue();
         }
 

@@ -77,7 +77,6 @@ public class TurnManager : MonoBehaviour {
 				nextTurn();
 			}else{
 				obstaclesActivated = true;
-				print("activating obstacles");
 				onActivateObstacles();
 			}
 			
@@ -88,7 +87,6 @@ public class TurnManager : MonoBehaviour {
     private void nextTurn()
     {
 		if (currentTurn == numberOfTurnsPerRound){
-			print("ROUND COMPLETE");
 			currentTurn = startingTurn;
 			currentRound++;
 		}else{
