@@ -21,7 +21,6 @@ namespace Robo.Bots
         Queue<Command> commandQueue = new Queue<Command>();
         Command currentCommand;
         
-        bool rotationStarted = false;
         float desiredRotation;
         Quaternion finalRotation;
 
@@ -57,8 +56,7 @@ namespace Robo.Bots
         //TODO Consider moving to BotMovement
         void Update()
         {
-            bool isCurrentBotsTurn = (this == turnManager.getActiveTurn()); //Bot is in the current queue (prevents simulatenous play)
-            if (isCurrentBotsTurn)
+            if (this == turnManager.getActiveTurn())
             {
                 HandleActions();
             }

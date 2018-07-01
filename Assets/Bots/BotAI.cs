@@ -11,31 +11,39 @@ namespace Robo.Bots
         Deck deck;
         int currentRound = 1;
 
+        Register[] players; 
         BotMovement bot;
         TurnManager turnManager;
 
         void Start(){
             turnManager = FindObjectOfType<TurnManager>();
+            players = FindObjectsOfType<Register>();
             bot = GetComponent<BotMovement>();
             deck = GetComponent<Deck>();
         }
 
         void Update(){
             if (currentRound == turnManager.CurrentRound){
-                currentRound++;	
-                ProcessAIMoves();
+                if (turnManager.GetPlayersInQueue().Count == players.Length){
+                    bot.ProcessNextRound();
+                    turnManager.AddPlayerToQueue(bot);
+                    currentRound++;	
+                    DrawAndPlayAllCards();
+                }
             }
         }
-
-        public void ProcessAIMoves()
-		{
-			DrawAndPlayAllCards();
-		}
 
         //TODO rework AI later
         public void DrawAndPlayAllCards()
         {
-            bot.cards = deck.DrawCards(turnManager.NumberOfCardsPlayedPerRound);
+            List<Robo.Cards.CardConfig> cards = deck.DrawCards(turnManager.NumberOfCardsPlayedPerRound);
+            foreach (CardConfig card in cards)
+			{
+				bot.AddCardToProcessor(card);
+				if (!card.DestroyCardAfterPlaying){
+					deck.DiscardCard(card);
+				}
+			}
         }
     }
 }

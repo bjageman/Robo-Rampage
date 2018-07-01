@@ -58,6 +58,10 @@ public class TurnManager : MonoBehaviour {
 		}
     }
 
+	public List<BotMovement> GetPlayersInQueue(){
+		return players;
+	}
+
     public BotMovement getActiveTurn(){
 		if (players.Count > 0){
 			return players[0];

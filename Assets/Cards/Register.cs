@@ -12,18 +12,18 @@ namespace Robo.Cards{
 		[SerializeField] Deck deck; //TODO This should only be in one place...
 		[SerializeField] Hand hand; //TODO Don't do this either. Probably use an observer
 
-		TurnManager turnHandler;
+		TurnManager turnManager;
 		Card[] cards;
 
 		void Start(){
-			turnHandler = FindObjectOfType<TurnManager>();
+			turnManager = FindObjectOfType<TurnManager>();
 		}
 
 		//Run when clicked "SUBMIT"
 		public void ProcessRegister()
 		{
 			cards = GetComponentsInChildren<Card>();
-			if (turnHandler.NumberOfCardsPlayedPerRound == cards.Length){
+			if (turnManager.NumberOfCardsPlayedPerRound == cards.Length){
 				bot.ProcessNextRound();
 				HandleCardCommandsInRegister();
 				hand.DrawHandToFull();
@@ -45,7 +45,7 @@ namespace Robo.Cards{
 				}
 				Destroy(card.gameObject);
 			}
-			turnHandler.AddPlayerToQueue(bot);
+			turnManager.AddPlayerToQueue(bot);
 		}
 	}
 }
