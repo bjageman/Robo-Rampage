@@ -66,6 +66,7 @@ public class TurnManager : MonoBehaviour {
 	}
 
 	public void submitTurn(BotMovement player){
+		print(players.Count);
 		for (int i = players.Count - 1; i >= 0; i--){
 			if (GameObject.ReferenceEquals(player.gameObject, players[i].gameObject)){
 				players.Remove(players[i]);

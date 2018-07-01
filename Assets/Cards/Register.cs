@@ -43,9 +43,9 @@ namespace Robo.Cards{
 				if (!card.GetCardConfig.DestroyCardAfterPlaying){
 					deck.DiscardCard(card.GetCardConfig);
 				}
-				turnHandler.AddPlayerToQueue(bot);
 				Destroy(card.gameObject);
 			}
+			turnHandler.AddPlayerToQueue(bot);
 		}
 	}
 }

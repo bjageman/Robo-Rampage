@@ -5,10 +5,10 @@ using Robo.Cards;
 
 namespace Robo.Bots
 {
+    //TODO Bots are not performing second turn
     public class BotAI : MonoBehaviour
     {
         Deck deck;
-
         int currentRound = 1;
 
         BotMovement bot;
@@ -32,7 +32,7 @@ namespace Robo.Bots
 			DrawAndPlayAllCards();
 		}
 
-        //TODO rework later
+        //TODO rework AI later
         public void DrawAndPlayAllCards()
         {
             bot.cards = deck.DrawCards(turnManager.NumberOfCardsPlayedPerRound);
