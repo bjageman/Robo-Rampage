@@ -22,11 +22,30 @@ namespace Robo.Board{
 			Gizmos.DrawSphere(transform.position, waypointSize);
 		}
 
+		//TODO Move collided bot in front of current bot
 		void OnTriggerEnter(Collider other) {
-			BotMovement bot = other.GetComponent<BotMovement>();
-			if (bot){
-				bot.SetCurrentWaypoint(this);
+			BotMovement currentBot = other.GetComponent<BotMovement>();
+			if (currentBot){
+				currentBot.CurrentWaypoint = this;
+				BotMovement possibleBotCollide = CheckForBotCollision(currentBot);
+				if (possibleBotCollide != null){
+					print("Bot collided with " + possibleBotCollide );
+				}
+				
 			}
+		}
+
+		//TODO May need to move this elsewhere
+		BotMovement CheckForBotCollision(BotMovement currentBot){
+			List<BotMovement> bots = new List<BotMovement>(); 
+			bots.AddRange(FindObjectsOfType<BotMovement>());
+			bots.Remove(currentBot);
+			foreach(BotMovement bot in bots){
+				if (bot.CurrentWaypoint == currentBot.CurrentWaypoint){
+					return bot;
+				}
+			}
+			return null;
 		}
 
 	}

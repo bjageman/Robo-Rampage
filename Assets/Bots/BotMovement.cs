@@ -28,7 +28,9 @@ namespace Robo.Bots
         int cardIndex = 0;
         public List<CardConfig> cards; //TODO make getter/setter
 
-        public void SetCurrentWaypoint(Waypoint waypoint) { currentWaypoint = waypoint; }
+        public Waypoint CurrentWaypoint { 
+            get { return currentWaypoint; }
+            set {currentWaypoint = value; } }
 
         public Waypoint SetDestinationWaypoint(int x, int y) { return SetDestinationWaypoint(new Vector2Int(x, y)); }
         public Waypoint SetDestinationWaypoint(Vector2Int waypoint)

@@ -7,7 +7,6 @@ using Robo.Board;
 namespace Robo.Cards{
     public class MoveBehavior : CardBehavior {
 
-        Vector2Int direction;
         Vector2Int movePosition;
         BoardProcessor board;
         
@@ -15,10 +14,9 @@ namespace Robo.Cards{
         public override void Use(BotMovement bot)
         {
             board = FindObjectOfType<BoardProcessor>();
-            direction = bot.GetFacingDirection();
             Vector3 previousPosition = bot.transform.position;
             for (int i = 0; i < (config as MoveConfig).MoveSpaces; i++){
-                Waypoint nextWaypoint = GetForwardDirectionWaypoint(previousPosition);
+                Waypoint nextWaypoint = GetForwardDirectionWaypoint(bot, previousPosition);
                 if (nextWaypoint != null){
                      MoveBot(bot, nextWaypoint);
                      previousPosition = nextWaypoint.transform.position;
@@ -32,12 +30,12 @@ namespace Robo.Cards{
             bot.AddCommandToQueue(new Command("MOVE", nextWaypoint));
         }
 
-        private Waypoint GetForwardDirectionWaypoint(Vector3 nextPosition)
-        {
-            var moveDirectionPower = new Vector2Int(direction.x, direction.y);
+        private Waypoint GetForwardDirectionWaypoint(BotMovement bot, Vector3 nextPosition)
+        {   
+            print(bot.transform.forward);
             return board.GetNearestWaypoint(new Vector2Int(
-                Mathf.RoundToInt(nextPosition.x + moveDirectionPower.x),
-                Mathf.RoundToInt(nextPosition.z + moveDirectionPower.y)
+                Mathf.RoundToInt(nextPosition.x + bot.transform.forward.x),
+                Mathf.RoundToInt(nextPosition.z + bot.transform.forward.y)
             ));
         }
     }

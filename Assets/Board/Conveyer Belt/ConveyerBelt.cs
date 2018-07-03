@@ -8,7 +8,7 @@ using Robo.Board;
 namespace Robo.Board{
 	[SelectionBase]
 	public class ConveyerBelt : Waypoint, IObstacle {
-		[SerializeField] Vector2Int direction = new Vector2Int(0,1);
+		[SerializeField] int moveSpaces = 1;
 
 		Vector3 movePosition;
 		BotMovement bot;
@@ -18,15 +18,16 @@ namespace Robo.Board{
 		}
 
 		public void endTurnTrigger(BotMovement bot){
-			print("Conveyer activated");
 			BoardProcessor board = FindObjectOfType<BoardProcessor>();
 			TurnManager turnManager = FindObjectOfType<TurnManager>();
 			Vector3 botPosition = bot.transform.position;
 			Waypoint moveToWaypoint = board.GetNearestWaypoint(new Vector2Int(
-                Mathf.RoundToInt(botPosition.x + direction.x),
-                Mathf.RoundToInt(botPosition.z + direction.y)
+                Mathf.RoundToInt(botPosition.x + transform.forward.x * moveSpaces),
+                Mathf.RoundToInt(botPosition.z + transform.forward.z * moveSpaces)
             ));
-			bot.AddCommandToQueue(new Command("MOVE", moveToWaypoint));
+			if (moveToWaypoint != null){
+				bot.AddCommandToQueue(new Command("MOVE", moveToWaypoint));
+			}
 			turnManager.AddPlayerToQueue(bot);
 		}
     }

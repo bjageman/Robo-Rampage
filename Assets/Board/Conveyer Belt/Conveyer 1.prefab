@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 114273085439186850}
   - component: {fileID: 222703690336057292}
   m_Layer: 0
-  m_Name: Conveyer 2
+  m_Name: Conveyer 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,7 +92,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 0ec0a156a6694884c911ca75df82380e, type: 2}
+  - {fileID: 2100000, guid: 65ff7538416d8b247ba93256c3da4eda, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deee8cef3ab416242bc598dfa75e81d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpaces: 2
+  direction: {x: 1, y: 0}
 --- !u!222 &222115230083587538
 CanvasRenderer:
   m_ObjectHideFlags: 1
