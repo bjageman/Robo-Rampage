@@ -154,11 +154,11 @@ namespace Robo.Bots
         // TODO Rotation is bugged
         public void RotateBot(int numRotations)
         {
-            int zRotation = 90 * numRotations;
+            int yRotation = 90 * numRotations;
             transform.Rotate(
                 0f,
-                0f,
-                zRotation
+                yRotation,
+                0
             );
 
             GetNewCommandInQueue();
