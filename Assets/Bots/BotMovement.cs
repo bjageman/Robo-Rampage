@@ -13,6 +13,7 @@ namespace Robo.Bots
         [SerializeField] Vector2Int currentDirection;
         [SerializeField] float moveSpeed = .5f;
         [SerializeField] [Range(.01f, .5f)] public float waypointThreshold = .1f; 
+        [SerializeField] CardConfig spamCard;
 
         Waypoint currentWaypoint;
         BoardProcessor board;
@@ -23,15 +24,11 @@ namespace Robo.Bots
         float desiredRotation;
         Quaternion finalRotation;
 
+        public bool isAlive = true;
         bool actionSubmitted = false;
-        bool isMoving = false;
         int cardIndex = 0;
         public List<CardConfig> cards; //TODO make getter/setter
 
-        public bool IsMoving { 
-            get { return isMoving; }
-            set { isMoving = value; }    
-        }
         public Waypoint CurrentWaypoint { 
             get { return currentWaypoint; }
             set {currentWaypoint = value; } }
@@ -42,6 +39,7 @@ namespace Robo.Bots
             SetupInitialBoardPosition();
             cards = new List<CardConfig>();
             turnManager.onActivateObstacles += OnActivateObstacles;
+            turnManager.onFireLasers += OnFireLasers;
         }
 
         void SetupInitialBoardPosition()
@@ -78,7 +76,7 @@ namespace Robo.Bots
 		}
 
         //TODO Going over the board should lead to death
-        //TODO Handle blocked movement
+        //TODO Handle blocked movement (note: walls need to be implemented)
         public void MoveToWaypoint(Waypoint destination) 
         {
             if (destination == null ){ return; }
@@ -86,7 +84,6 @@ namespace Robo.Bots
             Vector3 direction = (destination.transform.position - transform.position);
             if (distanceBetweenWaypoints > waypointThreshold)
             {
-                isMoving = true;
                 float step = moveSpeed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, step);
                 distanceBetweenWaypoints = (transform.position - destination.transform.position).magnitude;
@@ -107,26 +104,41 @@ namespace Robo.Bots
                     PushBot(bot, direction);
                 }
             }
-
         }
 
         public void PushBot(BotMovement bot, Vector3 direction)
         {
             bot.transform.position += direction;
             bot.FixPositionToWaypoint();
-            bot.CheckForBotCollision(bot.currentWaypoint, direction);
+            if (bot.isAlive){
+                bot.CheckForBotCollision(bot.currentWaypoint, direction);
+            }
         }
 
         public void FixPositionToWaypoint()
         {
             var nearestWaypoint = board.GetNearestWaypoint(transform.position.x, transform.position.z, waypointThreshold);
-            transform.position = nearestWaypoint.transform.position;
-            currentWaypoint = nearestWaypoint;
-            isMoving = false;
+            if (nearestWaypoint == null){
+                DestroyBot();
+            }else{
+                transform.position = nearestWaypoint.transform.position;
+                currentWaypoint = nearestWaypoint;
+            }            
+            
+        }
+
+        //TODO Change to respawn
+        private void DestroyBot()
+        {
+            isAlive = false;
+            turnManager.onActivateObstacles -= OnActivateObstacles;
+            turnManager.onFireLasers -= OnFireLasers;
+            turnManager.RemovePlayerFromQueue(this);
+            Destroy(this.gameObject);
+            //Respawn() //TODO implement later
         }
 
         // TODO Animate rotations
-        // TODO Rotation is bugged
         public void RotateBot(int numRotations)
         {
             int yRotation = 90 * numRotations;
@@ -153,7 +165,7 @@ namespace Robo.Bots
                 if (currentCommand.action == "MOVE"){
                     MoveToWaypoint(currentCommand.waypoint);
                 }else if (currentCommand.action == "ROTATE"){
-                    RotateBot(currentCommand.amount); //TODO set to var
+                    RotateBot(currentCommand.amount); 
                 }
             }
             
@@ -191,19 +203,19 @@ namespace Robo.Bots
             }
         }
 
-        //TODO Double collision breaks
-        //TODO Make it work with null
-        //TODO Not fluid movement
-        // void OnTriggerEnter(Collider other) {
-        //     BotMovement bot = other.GetComponent<BotMovement>();
-        //     if (isMoving && bot != null)
-        //     {
-        //         bot.IsMoving = true;
-        //         //TODO Movement can be made better here
-        //         PushBot(bot);
-        //     }
-        // }
-
+        private void OnFireLasers()
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+            {
+                BotMovement bot = hit.collider.GetComponent<BotMovement>();
+                if (bot != null){
+                    Deck deck = bot.GetComponent<Deck>();
+			        deck.DiscardCard(spamCard);
+                }
+                
+            }
+        }
     }
 
     public struct Command  

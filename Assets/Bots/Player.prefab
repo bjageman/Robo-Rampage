@@ -256,15 +256,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1320991486846392}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 0.97, y: 0, z: -0.03}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3, y: 0, z: -4.01}
   m_LocalScale: {x: 0.3, y: 0.30000025, z: 0.30000025}
   m_Children:
   - {fileID: 224659232506782910}
   - {fileID: 4515888619668216}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4515888619668216
 Transform:
   m_ObjectHideFlags: 1
@@ -703,6 +703,8 @@ MonoBehaviour:
   currentDirection: {x: 0, y: 0}
   moveSpeed: 3
   waypointThreshold: 0.1
+  spamCard: {fileID: 11400000, guid: 8cdc53496c21acb48821dcb20553fa67, type: 2}
+  isAlive: 1
   cards: []
 --- !u!114 &114667696236225062
 MonoBehaviour:

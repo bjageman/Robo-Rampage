@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 64867581328829816}
   - component: {fileID: 23112429219112604}
   - component: {fileID: 222115230083587538}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 114119088083979796}
   - component: {fileID: 114273085439186850}
   - component: {fileID: 222703690336057292}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Conveyer 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,9 +56,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1504145550132622}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.078227, y: -1.1666405, z: 4.2630563}
-  m_LocalScale: {x: 0.90000045, y: 1, z: 0.90000045}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.07822716, y: -1.1666405, z: -0.73694384}
+  m_LocalScale: {x: 0.90000093, y: 1, z: 0.90000093}
   m_Children:
   - {fileID: 4677585577480950}
   m_Father: {fileID: 0}
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deee8cef3ab416242bc598dfa75e81d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 1, y: 0}
+  moveSpaces: 1
 --- !u!222 &222115230083587538
 CanvasRenderer:
   m_ObjectHideFlags: 1

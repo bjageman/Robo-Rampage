@@ -56,7 +56,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1553071937816608}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.09, y: 0, z: -2.09}
+  m_LocalPosition: {x: -6, y: 0, z: -1.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4657867375064366}
@@ -91,7 +91,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 13d55868208e0984694892aeac26fdaa, type: 2}
+  - {fileID: 2100000, guid: f3c54800104d31941a64a191af4e9a3a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -188,6 +188,8 @@ MonoBehaviour:
   currentDirection: {x: 0, y: 0}
   moveSpeed: 3
   waypointThreshold: 0.1
+  spamCard: {fileID: 11400000, guid: 8cdc53496c21acb48821dcb20553fa67, type: 2}
+  isAlive: 1
   cards: []
 --- !u!114 &114803790281397844
 MonoBehaviour:

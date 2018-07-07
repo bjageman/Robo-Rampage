@@ -26,6 +26,9 @@ public class TurnManager : MonoBehaviour {
 	public delegate void ActivateObstacles();
 	public event ActivateObstacles onActivateObstacles;
 
+	public delegate void FireLasers();
+	public event FireLasers onFireLasers;
+
 	void Awake() {
 		//TODO Enforce singleton
 	}
@@ -38,6 +41,10 @@ public class TurnManager : MonoBehaviour {
 
 	public void AddPlayerToQueue(BotMovement newPlayer){
 		players.Add(newPlayer);
+	}
+
+	public void RemovePlayerFromQueue(BotMovement player){
+		players.Remove(player);
 	}
 
 	//TODO Make this more elegant
@@ -71,12 +78,14 @@ public class TurnManager : MonoBehaviour {
 
 	public void submitTurn(BotMovement player){
 		for (int i = players.Count - 1; i >= 0; i--){
-			if (GameObject.ReferenceEquals(player.gameObject, players[i].gameObject)){
+			if (players[i] != null && GameObject.ReferenceEquals(player.gameObject, players[i].gameObject)){
 				players.Remove(players[i]);
 			}
 		}
+		print(players.Count);
 		if (players.Count == 0){
 			if (obstaclesActivated){
+				onFireLasers();
 				obstaclesActivated = false;
 				nextTurn();
 			}else{

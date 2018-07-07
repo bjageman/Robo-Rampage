@@ -17,6 +17,13 @@ namespace Robo.Board{
 				
 		}
 
+		void Awake(){
+			BoardProcessor board = FindObjectOfType<BoardProcessor>();
+			if (transform.parent != board){
+				transform.parent = board.transform;
+			}
+		}
+
 		public void OnDrawGizmos(){
 			Gizmos.color = Color.red;
 			Gizmos.DrawSphere(transform.position, waypointSize);
