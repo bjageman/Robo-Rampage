@@ -14,7 +14,6 @@ namespace Robo.Board{
 
 		public void endTurnTrigger(BotMovement bot){
 			TurnManager turnManager = FindObjectOfType<TurnManager>();
-			print("hit by laser");
 			Deck deck = bot.GetComponent<Deck>();
 			deck.DiscardCard(spamCard);
 			turnManager.AddPlayerToQueue(bot);

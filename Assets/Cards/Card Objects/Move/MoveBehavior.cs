@@ -32,7 +32,6 @@ namespace Robo.Cards{
 
         private Waypoint GetForwardDirectionWaypoint(BotMovement bot, Vector3 nextPosition)
         {   
-            print(bot.transform.forward);
             return board.GetNearestWaypoint(new Vector2Int(
                 Mathf.RoundToInt(nextPosition.x + bot.transform.forward.x),
                 Mathf.RoundToInt(nextPosition.z + bot.transform.forward.z)
