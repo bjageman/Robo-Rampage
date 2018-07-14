@@ -14,6 +14,8 @@ namespace Robo.Board{
 		public Waypoint GetNearestWaypoint(Vector2Int waypoint, float threshold = .1f){
 			return GetNearestWaypoint(waypoint.x, waypoint.y, threshold);
 		}
+
+		//TODO Not returning null when there's no nearby grid
 		public Waypoint GetNearestWaypoint(float positionX, float positionY, float threshold = .1f){
 			Vector2Int waypointPosition = new Vector2Int (
 				Mathf.RoundToInt(positionX), 

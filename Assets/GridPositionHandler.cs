@@ -11,15 +11,30 @@ public class GridPositionHandler : MonoBehaviour {
 	Waypoint currentWaypoint;
 	BoardProcessor board;
 
+	public Waypoint CurrentWaypoint { 
+		get { return currentWaypoint;  } 
+		set { currentWaypoint = value; }	
+	}
+
 	// Use this for initialization
 	void Start () {
 		board = FindObjectOfType<BoardProcessor>();
 		currentWaypoint = board.GetNearestWaypoint(transform.position.x, transform.position.z, waypointThreshold);
 		transform.position = currentWaypoint.transform.position;
+		transform.parent = currentWaypoint.transform;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public Waypoint FixPositionToWaypoint()
+	{
+		var nearestWaypoint = board.GetNearestWaypoint(transform.position.x, transform.position.z, waypointThreshold);
+		if (nearestWaypoint == null){
+			currentWaypoint = null;
+			return null; //DestroyBot();
+		}else{
+			transform.position = nearestWaypoint.transform.position;
+			currentWaypoint = nearestWaypoint;
+			transform.parent = currentWaypoint.transform;
+			return currentWaypoint;
+		}            
 	}
 }

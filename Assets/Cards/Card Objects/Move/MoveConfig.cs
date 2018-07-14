@@ -11,9 +11,8 @@ namespace Robo.Cards{
 
 		public int MoveSpaces { get { return moveSpaces; }}
 
-		//TODO Attach to bot that's calling it
 		public override CardBehavior GetBehaviorComponent(GameObject objectToAttachTo){
-		return objectToAttachTo.AddComponent<MoveBehavior>();
+			return objectToAttachTo.AddComponent<MoveBehavior>();
 		}
 	}
 }

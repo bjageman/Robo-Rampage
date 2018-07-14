@@ -33,7 +33,7 @@ namespace Robo.Board{
 		void OnTriggerEnter(Collider other) {
 			BotMovement currentBot = other.GetComponent<BotMovement>();
 			if (currentBot){
-				currentBot.CurrentWaypoint = this;
+				currentBot.GetComponent<GridPositionHandler>().CurrentWaypoint = this;
 			}
 		}
 

@@ -8,15 +8,14 @@ using System;
 namespace Robo.Bots
 {
 	//TODO Figure out how to reduce code here
+    [RequireComponent(typeof(GridPositionHandler))]
     public class BotMovement : MonoBehaviour
     {
         [SerializeField] Vector2Int currentDirection;
         [SerializeField] float moveSpeed = .5f;
-        [SerializeField] [Range(.01f, .5f)] public float waypointThreshold = .1f; 
         [SerializeField] CardConfig spamCard;
 
-        Waypoint currentWaypoint;
-        BoardProcessor board;
+        GridPositionHandler gridPositionHandler;
         TurnManager turnManager;
         Queue<Command> commandQueue = new Queue<Command>();
         Command currentCommand;
@@ -29,24 +28,15 @@ namespace Robo.Bots
         int cardIndex = 0;
         public List<CardConfig> cards; //TODO make getter/setter
 
-        public Waypoint CurrentWaypoint { 
-            get { return currentWaypoint; }
-            set {currentWaypoint = value; } }
 
         void Start()
         {
+            gridPositionHandler = GetComponent<GridPositionHandler>();
             turnManager = FindObjectOfType<TurnManager>();
-            SetupInitialBoardPosition();
             cards = new List<CardConfig>();
             turnManager.onActivateObstacles += OnActivateObstacles;
+            turnManager.onActivateCollectibles += OnActivateCollectibles;
             turnManager.onFireLasers += OnFireLasers;
-        }
-
-        void SetupInitialBoardPosition()
-        {
-            board = FindObjectOfType<BoardProcessor>();
-            currentWaypoint = board.GetNearestWaypoint(transform.position.x, transform.position.z, waypointThreshold);
-            transform.position = currentWaypoint.transform.position;
         }
 
         //TODO Consider moving to BotMovement
@@ -82,14 +72,14 @@ namespace Robo.Bots
             if (destination == null ){ return; }
             float distanceBetweenWaypoints = (transform.position - destination.transform.position).magnitude;
             Vector3 direction = (destination.transform.position - transform.position);
-            if (distanceBetweenWaypoints > waypointThreshold)
+            if (distanceBetweenWaypoints > gridPositionHandler.waypointThreshold)
             {
                 float step = moveSpeed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, step);
                 distanceBetweenWaypoints = (transform.position - destination.transform.position).magnitude;
                 CheckForBotCollision(destination, direction);
             }else{
-                FixPositionToWaypoint();
+                gridPositionHandler.FixPositionToWaypoint();
                 GetNewCommandInQueue();
             }
         }
@@ -99,7 +89,7 @@ namespace Robo.Bots
             List<BotMovement> bots = new List<BotMovement>(FindObjectsOfType<BotMovement>());
             bots.Remove(this);
             foreach (BotMovement bot in bots){
-                Waypoint botWaypoint = bot.currentWaypoint.GetComponent<Waypoint>();
+                Waypoint botWaypoint = bot.GetComponent<GridPositionHandler>().CurrentWaypoint;
                 if (botWaypoint == destination){
                     PushBot(bot, direction);
                 }
@@ -109,29 +99,22 @@ namespace Robo.Bots
         public void PushBot(BotMovement bot, Vector3 direction)
         {
             bot.transform.position += direction;
-            bot.FixPositionToWaypoint();
+            Waypoint result = bot.gridPositionHandler.FixPositionToWaypoint();
+            if (result == null) { bot.DestroyBot(); }
             if (bot.isAlive){
-                bot.CheckForBotCollision(bot.currentWaypoint, direction);
+                bot.CheckForBotCollision(bot.GetComponent<GridPositionHandler>().CurrentWaypoint, direction);
             }
         }
 
-        public void FixPositionToWaypoint()
-        {
-            var nearestWaypoint = board.GetNearestWaypoint(transform.position.x, transform.position.z, waypointThreshold);
-            if (nearestWaypoint == null){
-                DestroyBot();
-            }else{
-                transform.position = nearestWaypoint.transform.position;
-                currentWaypoint = nearestWaypoint;
-            }            
-            
-        }
+
 
         //TODO Change to respawn
-        private void DestroyBot()
+        public void DestroyBot()
         {
+            print("KILLING BOT");
             isAlive = false;
-            turnManager.onActivateObstacles -= OnActivateObstacles;
+            turnManager.onActivateObstacles -= OnActivateObstacles;            
+            turnManager.onActivateCollectibles -= OnActivateCollectibles;
             turnManager.onFireLasers -= OnFireLasers;
             turnManager.RemovePlayerFromQueue(this);
             Destroy(this.gameObject);
@@ -194,15 +177,22 @@ namespace Robo.Bots
             cardIndex++;
         }
 
-        void OnActivateObstacles(){
-            //TODO Make this look up any obstactle attached to a waypoint
-            if (currentWaypoint.GetComponent<IObstacle>() != null){
-                currentWaypoint.GetComponent<IObstacle>().endTurnTrigger(this);
+        void OnActivateCollectibles(){
+            CollectibleHandler[] collectibles = gridPositionHandler.CurrentWaypoint.GetComponentsInChildren<CollectibleHandler>();
+            foreach (CollectibleHandler collectible in collectibles){
+                collectible.Activate(gameObject);
+            }
+        }
+
+        void OnActivateObstacles(){            
+            if (gridPositionHandler.CurrentWaypoint.GetComponent<IObstacle>() != null){
+                gridPositionHandler.CurrentWaypoint.GetComponent<IObstacle>().endTurnTrigger(this);
             }else{
                 turnManager.AddPlayerToQueue(this);
             }
         }
 
+        //TODO Add laser particle
         private void OnFireLasers()
         {
             RaycastHit hit;

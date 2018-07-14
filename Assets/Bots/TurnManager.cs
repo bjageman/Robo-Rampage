@@ -8,6 +8,7 @@ using Robo.Bots;
 public class TurnManager : MonoBehaviour {
 
 	[SerializeField] int numberOfTurnsPerRound = 5;
+	[SerializeField] int checkpointsNeededToWin = 2;
 
 	int startingTurn = 1;
 	int currentTurn;
@@ -15,16 +16,16 @@ public class TurnManager : MonoBehaviour {
 	List<BotMovement> players;
 	bool obstaclesActivated = false;
 
-
 	public int CurrentTurn { get { return currentTurn; }}
 	public int CurrentRound { get { return currentRound; }}
 	public int NumberOfCardsPlayedPerRound { get { return numberOfTurnsPerRound; }}
 	public bool ObstaclesActivated { get { return obstaclesActivated; }}
 
-
-
 	public delegate void ActivateObstacles();
 	public event ActivateObstacles onActivateObstacles;
+
+	public delegate void ActivateCollectibles();
+	public event ActivateObstacles onActivateCollectibles;
 
 	public delegate void FireLasers();
 	public event FireLasers onFireLasers;
@@ -82,9 +83,9 @@ public class TurnManager : MonoBehaviour {
 				players.Remove(players[i]);
 			}
 		}
-		print(players.Count);
 		if (players.Count == 0){
 			if (obstaclesActivated){
+				onActivateCollectibles(); //TODO Make sure these two don't run simultaneously (in case there is a push feature for the laser)
 				onFireLasers();
 				obstaclesActivated = false;
 				nextTurn();
@@ -92,19 +93,31 @@ public class TurnManager : MonoBehaviour {
 				obstaclesActivated = true;
 				onActivateObstacles();
 			}
-			
 		}
 	}
 
 	//TODO Set up an observer
     private void nextTurn()
     {
+		CheckWinConditions();
 		if (currentTurn == numberOfTurnsPerRound){
 			currentTurn = startingTurn;
 			currentRound++;
 		}else{
 			currentTurn++;
 	        AddPlayersToQueue();
+		}
+    }
+
+    private void CheckWinConditions()
+    {
+        BotMovement[] existingPlayers = FindObjectsOfType<BotMovement>();
+		if (existingPlayers.Length <= 0){ print("Everyone died! Stalemate."); }
+		if (existingPlayers.Length == 1){ print(existingPlayers[0] + " wins!"); }
+		foreach(BotMovement player in existingPlayers){
+			if(player.GetComponent<Score>().CurrentCheckpoint >= checkpointsNeededToWin){
+				print(player + " wins! Got final checkpoint!");
+			}
 		}
     }
 }
