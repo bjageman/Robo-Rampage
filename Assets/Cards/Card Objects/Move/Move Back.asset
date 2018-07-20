@@ -9,10 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a9b07515d4d4a04eb828531a8057859, type: 3}
-  m_Name: New Move Config
+  m_Name: Move Back
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: Move Back
   cardCost: 0
-  cardSprite: {fileID: 0}
+  cardSprite: {fileID: 21300000, guid: c4231531c4f8dc548b780dcb52a371ee, type: 3}
   destroyCardAfterPlaying: 0
   moveSpaces: 1
+  reverseMovement: 1
